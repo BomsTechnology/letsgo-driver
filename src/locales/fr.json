@@ -1,0 +1,44 @@
+{
+  "fr": {
+    "language": {
+      "zero": "Langue",
+      "one": "Langue",
+      "other": "Langues"
+    },
+    "french": "Français",
+    "english": "Anglais",
+    "welcome-message": {
+        "zero": "Salut Voyageur",
+        "one": "Salut %{name}"
+      },
+      "sub-welcome-message": "Où allez-vous aujourd'hui ?",
+      "current-position": "Position Actuelle",
+      "departure": "Départ",
+      "arrival": "Arrivée",
+      "destination": "Destination",
+      "budget": "Budget",
+      "search": "Recherche",
+      "home": "Accueil",
+      "profile": "Profil",
+      "logout": "Se deconnecter",
+      "keywords": "Mots clés",
+      "notification": {
+        "zero": "Notification",
+        "one": "Notification",
+        "other": "Notifications"
+      },
+      "more": "Plus",
+      "transaction-history": "Historique des transactions",
+      "security-information": "Information de sécurité",
+      "trip": {
+        "zero": "Voyage",
+        "one": "Voyage",
+        "other": "Voyages"
+      },
+      "alert": {
+        "zero": "Alerte",
+        "one": "Alerte",
+        "other": "Alertes"
+      }
+  }
+}
