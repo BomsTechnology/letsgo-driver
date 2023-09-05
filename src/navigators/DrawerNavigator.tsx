@@ -18,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
 import { logout } from "@services/useAuth";
 import { showError, showSuccess } from "@functions/helperFunctions";
+import ProfileScreen from "@screens/ProfileScreen";
 //import i18n from '../locales/i18n';
 
 const Drawer = createDrawerNavigator();
@@ -152,6 +153,22 @@ const DrawerNavigator = () => {
           drawerIcon: () => (
             <Ionicons
               name="home-outline"
+              size={20}
+              color={settingState.setting.isDarkMode ? Colors.grayTone3 : Colors.grayTone2}
+              style={{ position: "absolute", left: 10 }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+          drawerLabel: "Profile",
+          drawerIcon: () => (
+            <Ionicons
+              name="person-outline"
               size={20}
               color={settingState.setting.isDarkMode ? Colors.grayTone3 : Colors.grayTone2}
               style={{ position: "absolute", left: 10 }}
