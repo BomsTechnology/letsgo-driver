@@ -5,7 +5,7 @@ import Colors from '@constants/colors';
 import { RootState,  useAppSelector,  } from "@store/store";
 
 interface CustomInputProps {
-    control: Control;
+    control?: Control;
     name: string;
     placeholder: string;
     secureTextEntry?: boolean;

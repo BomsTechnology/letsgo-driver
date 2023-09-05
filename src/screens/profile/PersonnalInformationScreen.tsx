@@ -132,6 +132,7 @@ const PersonnalInformationScreen = () => {
           </View>
         </View>
       </View>
+      
       <ScrollView
         style={[settingState.setting.isDarkMode ? styles.contentScroll_DARK : styles.contentScroll]}
         showsVerticalScrollIndicator={false}

@@ -5,6 +5,7 @@ import ExperienceScreen from "@screens/profile/ExperienceScreen";
 import TimetableScreen from "@screens/profile/TimetableScreen";
 import IdentityPieceScreen from "@screens/profile/IdentityPieceScreen";
 import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScreen";
+import AddTaskScreen from "@screens/AddTaskScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -38,6 +39,11 @@ const StackNavigator = (stack: any) => {
       <stack.Screen
         name="PersonnalInformation"
         component={PersonnalInformationScreen}
+        options={{ headerShown: false }}
+      />
+       <stack.Screen
+        name="AddUpdateTaskScreen"
+        component={AddTaskScreen}
         options={{ headerShown: false }}
       />
     </>

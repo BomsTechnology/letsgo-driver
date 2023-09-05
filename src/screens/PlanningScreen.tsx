@@ -175,7 +175,7 @@ const PlanningScreen: React.FC = () => {
 			<FAB
 				icon="plus"
 				style={styles.fab}
-				onPress={() => navigation.navigate("AddPlanningScreen")}
+				onPress={() => navigation.navigate("AddUpdateTaskScreen", {})}
 			/>
 
 

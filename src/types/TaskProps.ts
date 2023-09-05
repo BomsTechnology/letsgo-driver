@@ -17,6 +17,7 @@ export type TaskProps = {
     id?: string,
     type?: TaskType,
     note?: string,
+    
     from?: StopLocationProp,
     to?: StopLocationProp,
 
