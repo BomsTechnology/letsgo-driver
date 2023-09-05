@@ -2,7 +2,7 @@ import React from "react";
 import DrawerNavigator from "@navigators/DrawerNavigator";
 import SkillScreen from "@screens/profile/SkillScreen";
 import ExperienceScreen from "@screens/profile/ExperienceScreen";
-import TimeTableScreen from "@screens/profile/TimeTableScreen";
+import TimetableScreen from "@screens/profile/TimetableScreen";
 import IdentityPieceScreen from "@screens/profile/IdentityPieceScreen";
 import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScreen";
 
@@ -27,7 +27,7 @@ const StackNavigator = (stack: any) => {
       />
       <stack.Screen
         name="TimeTable"
-        component={TimeTableScreen}
+        component={TimetableScreen}
         options={{ headerShown: false }}
       />
       <stack.Screen

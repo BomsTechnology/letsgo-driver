@@ -23,9 +23,17 @@ export type AppStackParamList = {
   TimeTable: undefined;
   IdentityPiece: undefined;
   PersonnalInformation: undefined;
+
+  TimetableScreen: undefined;
+  AddPlanningScreen: undefined;
+  ViewPlanningScreen: {
+    task: any
+  };
+
   Login: { countryCode?: countryCodeProps, phoneNumber?: string };
   OTP: { countryCode: countryCodeProps, phoneNumber: string };
 };
+
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
