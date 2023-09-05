@@ -11,8 +11,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@store/store";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   getUserInfo,
-  updateUserInfo,
-  createPoolerAccount,
+  updateUserInfo
 } from "@services/useUser";
 import { showError, showSuccess } from "@functions/helperFunctions";
 import DatePicker from "@components/inputFields/DatePicker";
@@ -20,7 +19,7 @@ import CustomDropdownInput, {
   DropDataProps,
 } from "@components/inputFields/CustomDropdownInput";
 
-const ProfileScreen = () => {
+const PersonnalInformationScreen = () => {
   const settingState = useAppSelector(
     (state: RootState) => state.setting
   );
@@ -267,4 +266,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   }
 });
-export default ProfileScreen;
+export default PersonnalInformationScreen;

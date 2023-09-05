@@ -18,6 +18,11 @@ import { countryCodeProps } from "@data/CountryCode";
 export type AppStackParamList = {
   Home: undefined;
   OnBoarding: undefined;
+  Skills: undefined;
+  Experience: undefined;
+  TimeTable: undefined;
+  IdentityPiece: undefined;
+  PersonnalInformation: undefined;
   Login: { countryCode?: countryCodeProps, phoneNumber?: string };
   OTP: { countryCode: countryCodeProps, phoneNumber: string };
 };
