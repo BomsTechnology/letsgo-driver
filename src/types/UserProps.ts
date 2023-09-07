@@ -25,9 +25,7 @@ export default interface UserProps {
     "userPaymentModes"?: string;
     "score"?: string;
     "webSite"?: string;
-    "description"?: string;
-    //"isBusinessActor"?: string;
-    //"businessSector"?: string;
+    "description"?: string; 
     "updatedAt"?: string;
     "createdAt"?: string;
 }

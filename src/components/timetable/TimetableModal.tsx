@@ -24,8 +24,8 @@ export type TimeEntryModalProps = {
 
 const TimeEntryModal: React.FC<TimeEntryModalProps> = (props) => {
 
-    const [startTime, setStartTime] = useState<Date>(props.entry?.startTime!);
-    const [endTime, setEndTime] = useState<Date>(props.entry?.endTime!);
+    const [startTime, setStartTime] = useState<Date>(props.entry?.startTime || new Date());
+    const [endTime, setEndTime] = useState<Date>(props.entry?.endTime || new Date());
 
     
     useEffect(() => {

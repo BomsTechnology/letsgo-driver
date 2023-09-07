@@ -1,4 +1,4 @@
-import { TaskProps } from '@types/TaskProps';
+import { TaskProps } from '../types/TaskProps';
 import * as SQLite from 'expo-sqlite';
 
 
@@ -21,19 +21,23 @@ export const initDatabase = () => {
 
 export const savePlanningEntity = (entity: TaskProps) => {
 
-	db.transaction(tx => {
+	return new Promise<TaskProps>((resolve, reject) => {
 
-		tx.executeSql(CREATE_PLANNING_TABLE_QUERY);
+		db.transaction(tx => {
 
-		tx.executeSql(INSERT_PLANNING_QUERY,
-
-			[entity!.id! , JSON.stringify(entity)]
-			,
-			(result, resultSet) => { console.log(resultSet) }
-			,
-			(result, error) => { console.log(error); return true }
-		);
-
+			tx.executeSql(CREATE_PLANNING_TABLE_QUERY);
+	
+			tx.executeSql(INSERT_PLANNING_QUERY,
+	
+				[entity!.id! , JSON.stringify(entity)]
+				,
+				(_result, _resultSet) => { resolve(entity)}
+				,
+				(_result, _error) => { reject(); return true; }
+			);
+	
+		});
+		
 	});
 
 }
@@ -41,7 +45,7 @@ export const savePlanningEntity = (entity: TaskProps) => {
 
 export const deleteAllEntity = () => {
 
-	return new Promise<void>((resolve, reject) => {
+	return new Promise<void>((resolve, _reject) => {
 		
 		db.transaction(tx => {
 	
@@ -50,9 +54,9 @@ export const deleteAllEntity = () => {
 				,
 				[]
 				,
-				(result, resultSet) => { resolve() }
+				(_result, _resultSet) => { resolve() }
 				,
-				(result, error) => { console.log(error); return true }
+				(_result, error) => { console.log(error); return true }
 			);
 	
 		});
@@ -98,7 +102,7 @@ const convertRowToTaskObject = (props : ConvertRowToObjectProps) => {
 
 export const retrieveTasks = () => {
 
-	return new Promise<TaskProps[]>((resolve, reject) => {
+	return new Promise<TaskProps[]>((resolve, _reject) => {
 
 		db.transaction(tx => {
 
@@ -107,7 +111,7 @@ export const retrieveTasks = () => {
 				,
 				undefined
 				,
-				(result, resultSet) => { return resolve(convertRowToTaskObject({ rows: resultSet.rows._array as Row[] })); }
+				(_result, resultSet) => { return resolve(convertRowToTaskObject({ rows: resultSet.rows._array as Row[] })); }
 			);
 
 		});

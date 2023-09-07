@@ -20,6 +20,7 @@ import { logout } from "@services/useAuth";
 import { showError, showSuccess } from "@functions/helperFunctions";
 import ProfileScreen from "@screens/profile/ProfileScreen";
 import ChatScreen from "@screens/ChatScreen";
+import ConversationScreen from "@screens/ConversationScreen";
 //import i18n from '../locales/i18n';
 
 const Drawer = createDrawerNavigator();
@@ -179,7 +180,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen
         name="Chat"
-        component={ChatScreen}
+        component={ConversationScreen}
         options={{
           headerShown: false,
           drawerLabel: "Chat",

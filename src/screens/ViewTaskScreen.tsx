@@ -21,70 +21,42 @@ import CustomDropdownInput, {
 } from "@components/inputFields/CustomDropdownInput";
 import TimePicker from '@components/inputFields/TimePicker';
 import CustomInput from '@components/inputFields/CustomInput';
-import { TaskProps } from '../types/TaskProps';
+import { TaskProps, TaskType } from '../types/TaskProps';
 import { createTask } from '@services/usePlanning';
 import { savePlanningEntity } from '../cache/index';
 
 
 
 
-type AddUpdateTaskScreenProps = NativeStackScreenProps<AppStackParamList, "AddUpdateTaskScreen">
+type ViewTaskScreenProps = NativeStackScreenProps<AppStackParamList, "ViewTaskScreen">
 
 
-const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) => {
+const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) => {
 
 	const settingState = useAppSelector((state: RootState) => state.setting);
-	//const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+
+	const task = route.params.task;
 
 
-	const isUpdate = route.params.task !== undefined;
+	const [startTime, setStartTime] = useState<Date>(new Date());
+	const [endTime, setEndTime] = useState<Date>(new Date());
 
-	
-
-
-	const [task, setTask] = useState<TaskProps>(route.params.task || {
-		fromDate: new Date(), 
-	});
-
-
-	const handleOnchange = (text: any, input: string) => {
- 
-		setTask(prevState => ({ ...prevState, [input]: text }));
-	};
-
-	const [startTime, setStartTime] = useState<Date>(new Date()); 
-	const [endTime, setEndTime] = useState<Date>(new Date()); 
+	const [taskType, setTaskType] = useState<TaskType>(task.type!);
 
 	useEffect(() => {
-	 
+
 		console.log(task)
 
 	}, [task])
 
 
-	useEffect(() => {
-	 
-		handleOnchange(startTime.toLocaleTimeString(), "fromHour")
-
-	}, [startTime])
-
-	useEffect(() => {
-	 
-		handleOnchange(endTime.toLocaleTimeString(), "toHour")
-
-	}, [endTime])
-	
-
-
-
-
-	const [asError, setAsError] = useState(false); 
+	const [asError, setAsError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(undefined); 
+	const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(undefined);
 
 
 	const taskTypeData: DropDataProps[] = [
-		{ key: "1", value: "COURSE" }, 
+		{ key: "1", value: "COURSE" },
 		{ key: "3", value: "DEPOT" },
 		{ key: "4", value: "OTHER" },
 	];
@@ -95,45 +67,45 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 		{ key: "2", value: "URGENT" },
 	];
 
-	const handleSubmit = () => { 
+	const handleSubmit = () => {
 		let isValid = true;
- 
+
 
 		if (isValid) {
 			//setErrors({});
 			console.log('validééééé');
 
 			createTask(task)
-			.then(savePlanningEntity)
-			.then((task)=> {
+				.then(savePlanningEntity)
+				.then((task) => {
 
-				navigation.replace("ViewTaskScreen", {task: task});
+					navigation.replace("ViewTaskScreen", { task: task });
 
-			})
-			.catch((err)=> {
+				})
+				.catch((err) => {
 
-				console.log(err)
-			})
+					console.log(err)
+				})
 
 		}
 
 
 	};
- 
+
 
 
 	const [advencedVisible, setAdvencedVisible] = useState<boolean>(false);
 
 
 
- 
+
 
 	return (
 		<SafeAreaView style={settingState.setting.isDarkMode ? styles.container_DARK : styles.container}>
 
 			<View style={{ paddingHorizontal: 20 }}>
 				<SimpleHeader
-					text={isUpdate ? "Update Task" : "Add Planning"}
+					text={"Task Details"}
 				/>
 			</View>
 
@@ -144,23 +116,28 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>From Date</Text>
 
-				<DatePicker
-					date={task?.fromDate || new Date()}
-					setDate={(date) => handleOnchange(date, "fromDate")}
-					bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone1}
-				/>
+				<Text 
+					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
+				>
+
+					{task.fromDate?.toLocaleDateString()}
+
+				</Text>
 
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>To Date</Text>
 
-				<DatePicker
-					date={task?.toDate}
-					setDate={(date) => handleOnchange(date, "toDate")}
-					bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone1}
-				/>
+
+				<Text 
+					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
+				>
+
+					{task.toDate?.toLocaleDateString()}
+
+				</Text>
 
 				<Text style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>Heure De Debut </Text>
 				<TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
-				
+
 				<Text style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>Heure De Fin </Text>
 				<TimePicker bgColor='white' date={endTime} setDate={setEndTime} />
 
@@ -169,7 +146,7 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 				<CustomDropdownInput
 					placeholder="Select type"
 					data={taskTypeData}
-					setSelected={(value) => handleOnchange(value, "type")}
+					setSelected={setTaskType}
 					search={false}
 					asError={asError}
 					errorMessage={errorMessage}
@@ -178,15 +155,15 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 
 				<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>Note</Text>
 
-				<TextInput
-					numberOfLines={1}
+				<Text 
 					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
-							
-					placeholder="Enter your note"
-					onChangeText={(value) => handleOnchange(value, "note")}
-				/>
+				>
 
-				<TouchableOpacity style={{ zIndex: 50, borderBottomWidth:3, borderBottomColor: "orange", marginTop: 20, marginBottom: 5, flexDirection: "row", alignItems: "center", paddingBottom: 1 }}
+					{task.note}
+
+				</Text>
+
+				<TouchableOpacity style={{ zIndex: 50, borderBottomWidth: 3, borderBottomColor: "orange", marginTop: 20, marginBottom: 5, flexDirection: "row", alignItems: "center", paddingBottom: 1 }}
 					onPress={() => setAdvencedVisible(!advencedVisible)}
 				>
 					<Text style={{ fontWeight: "700", fontSize: 15 }}>Advanced</Text>
@@ -195,43 +172,27 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 				</TouchableOpacity>
 
 
+				<View style={{ paddingVertical: 20 }}>
 
-				{advencedVisible &&
+					<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>From Location</Text>
 
-					<View style={{ paddingVertical: 20 }}>
+					<TextInput
+						numberOfLines={1}
+						style={{ width: "100%", borderColor: Colors.primaryColor, marginVertical: 10, borderRadius: 15, borderWidth: 0.5, padding: 10, }}
+						placeholder="Enter from location"
+					/>
 
-						<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>From Location</Text>
+					<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>To Location</Text>
 
-						<TextInput
-							numberOfLines={1}
-							style={{ width: "100%", borderColor: Colors.primaryColor, marginVertical: 10, borderRadius: 15, borderWidth: 0.5, padding: 10, }}
-							placeholder="Enter from location"
-						/>
+					<TextInput
+						numberOfLines={1}
+						style={{ width: "100%", borderColor: Colors.primaryColor, marginVertical: 10, borderRadius: 15, borderWidth: 0.5, padding: 10, }}
+						placeholder="Enter to location"
+					/>
 
-						<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>To Location</Text>
+					<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>Priority</Text>
 
-						<TextInput
-							numberOfLines={1}
-							style={{ width: "100%", borderColor: Colors.primaryColor, marginVertical: 10, borderRadius: 15, borderWidth: 0.5, padding: 10, }}
-							placeholder="Enter to location"
-						/>
-
-
-						<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>Priority</Text>
-
-						<CustomDropdownInput
-							placeholder="Select type"
-							data={priorityData}
-							setSelected={(value) => handleOnchange(value, "priority")}
-							search={false}
-							asError={asError}
-							errorMessage={errorMessage}
-							defaultOption={defaultGender}
-						/>
-
-					</View>
-				}
-
+				</View>
 
 
 				<CustomButton
@@ -240,7 +201,7 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 					isReady={true}
 					onPress={(ev) => handleSubmit()}
 					marginVertical={30}
-					text={isUpdate ? "update task" : "create task"}
+					text={"create task"}
 					loading={false}
 				/>
 
@@ -251,7 +212,7 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({route, navigation}) 
 	)
 }
 
-export default AddTaskScreen;
+export default ViewTaskScreen;
 
 
 

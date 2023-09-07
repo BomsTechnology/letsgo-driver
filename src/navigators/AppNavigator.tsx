@@ -14,7 +14,7 @@ import { getLocalSetting } from "@services/useSetting";
 import SettingProps from "../types/SettingProps";
 //import i18n from '../locales/i18n'
 import { countryCodeProps } from "@data/CountryCode";
-import { TaskProps } from "@types/TaskProps";
+import { TaskProps } from "../types/TaskProps";
 
 export type AppStackParamList = {
   Home: undefined;
@@ -26,10 +26,11 @@ export type AppStackParamList = {
   PersonnalInformation: undefined;
 
   TimetableScreen: undefined;
+  Chat: undefined,
   AddUpdateTaskScreen: {
     task?: TaskProps
   };
-  ViewPlanningScreen: {
+  ViewTaskScreen: {
     task: TaskProps
   };
 

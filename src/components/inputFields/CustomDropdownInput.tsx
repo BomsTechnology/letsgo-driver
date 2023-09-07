@@ -12,7 +12,7 @@ export interface DropDataProps {
 
 interface CustomDropdownInputProps {
   data: DropDataProps[];
-  setSelected: Function;
+  setSelected: (value: any) => void;
   placeholder: string;
   defaultOption?: DropDataProps;
   search?: boolean;

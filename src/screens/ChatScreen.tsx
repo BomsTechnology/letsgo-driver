@@ -19,7 +19,8 @@ interface messageProps {
   message: string;
 }
 
-const ChatScreen = () => {
+const ChatScreen: React.FC = () => {
+
   const settingState = useAppSelector((state: RootState) => state.setting);
   const messages: messageProps[] = [
     {
@@ -125,7 +126,7 @@ const ChatScreen = () => {
           : styles.container
       }
     >
-      <SimpleHeader text="Chatbot" />
+      <SimpleHeader text="Mr Teubou" />
       <FlatList
         data={messages}
         showsHorizontalScrollIndicator={false}
@@ -143,12 +144,14 @@ const ChatScreen = () => {
           ? styles.inputContainer_DARK :  styles.inputContainer}>
         <TextInput
           placeholder="Type your message here..."
+          onFocus={(event) => console.log(event)}
           placeholderTextColor={Colors.grayTone3}
           style={settingState.setting.isDarkMode
             ? styles.input_DARK : styles.input}
         />
         <TouchableOpacity>
           <Ionicons name="send" size={25} color={Colors.primaryColor} />
+          <Ionicons name="mic" size={25} color={Colors.primaryColor} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>

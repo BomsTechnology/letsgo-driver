@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Colors from "@constants/colors";
 import { RootState, useAppSelector } from "@store/store";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,7 +13,9 @@ import { CalendarProvider, CalendarUtils, ExpandableCalendar, LocaleConfig } fro
 import { Calendar } from 'react-native-calendars';
 import { FAB } from 'react-native-paper';
 import Task from '../components/Task';
-import { TaskProps } from "@types/TaskProps";
+import { TaskProps } from "../types/TaskProps";
+
+import { retrieveTasks } from "../cache/index";
 
 
 //import { useNavigation } from '@react-navigation/native';
@@ -27,69 +29,30 @@ const PlanningScreen: React.FC = () => {
 	const currentDate = getDate();
 	const [selected, setSelected] = useState(currentDate);
 
-
-	const tasks = new Array<TaskProps>();
-
-	tasks.push({
-		from: {
-			name: "Simbock"
-		},
-		to: {
-			name: "TKC"
-		},
-		type: "COURSE",
-		fromHour: "8h",
-		toHour: "9h30",
-		status: "ONGOING",
-		note: "Course avec Mr "
-	})
-	tasks.push({
-		from: {
-			name: "Simbock  tttt"
-		},
-		to: {
-			name: "TKC yyyyyyyttttttf"
-		},
-		type: "COURSE",
-		fromHour: "8h",
-		toHour: "9h30",
-		status: "ABORTED",
-		note: "Course avec Mr bjihgjhvgjhvhgchvjvjvcjvjvkjbjkjkgjhchgchchhgcgcghchfxhjfgychfgj"
-	})
-	tasks.push({
-		from: {
-			name: "Mimboman"
-		},
-		to: {
-			name: "Melen"
-		},
-		type: "DEPOT",
-		status: "SCHEDULED",
-		fromHour: "10h",
-		toHour: "18h"
-	})
-	tasks.push({
-		from: {
-			name: "Mimboman"
-		},
-		to: {
-			name: "Melen"
-		},
-		type: "COLLECT",
-		status: "EXECUTED",
-		fromHour: "20h",
-		toHour: "22h"
-	})
+	
+	const [tasks, setTasks] = useState<TaskProps[]>(); 
 
 
+	const refreshTaskList = ()=> {
+
+		retrieveTasks()
+		.then(setTasks)
+	}
 
 
-	const eventsByDate = { "": tasks }
+	useEffect(() => {
+
+		refreshTaskList()
+
+	}, [])
+
+
+	const tasksByDate = { "": tasks }
 
 
 
 	const renderItemTaskInfo = (value: ListRenderItemInfo<TaskProps>) => (
-		<TouchableOpacity onPress={() => navigation.navigate("ViewPlanningScreen", { task: value.item })}>
+		<TouchableOpacity onPress={() => navigation.navigate("ViewTaskScreen", { task: value.item })}>
 			<Task {...value.item} />
 		</TouchableOpacity>
 	);

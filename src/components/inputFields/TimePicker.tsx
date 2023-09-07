@@ -1,12 +1,14 @@
 import { Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import Colors from '@constants/colors';
-import {Ionicons, FontAwesome5} from '@expo/vector-icons';
-import DateTimePicker , { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 const { width, height } = Dimensions.get('window');
+
+
 interface TimePickerProps {
-  date: Date;
-  setDate: Function;
+  date?: Date;
+  setDate: (hour: Date) => void;
   shadow?: boolean;
   bgColor?: string;
   marginHorizontal?: number;
@@ -19,56 +21,58 @@ interface TimePickerProps {
 const TimePicker = (props: TimePickerProps) => {
   const [show, setShow] = useState(false);
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-      const currentDate = selectedDate! || Date;
-      setShow(false);
-      props.setDate(currentDate);
+    const currentDate = selectedDate! || Date;
+    setShow(false);
+    props.setDate(currentDate);
   }
 
-return (
-  <>
-  
-  <TouchableOpacity onPress={() => setShow(!show)} style={[
-      styles.container,
-      props.shadow != null && props.shadow ? styles.shadowProp : props.shadow != null && !props.shadow ? undefined : styles.shadowProp,
-      styles.container_NORMAL,
-      {
-        backgroundColor: props.bgColor ? props.bgColor : undefined,
-        marginVertical: props.marginVertical ? props.marginVertical : undefined
-      }
-    ]}>
-      <View style={[styles.boxContainer]}>
+  return (
+    <>
+
+      <TouchableOpacity onPress={() => setShow(!show)} style={[
+        styles.container,
+        props.shadow != null && props.shadow ? styles.shadowProp : props.shadow != null && !props.shadow ? undefined : styles.shadowProp,
+        styles.container_NORMAL,
+        {
+          backgroundColor: props.bgColor ? props.bgColor : undefined,
+          marginVertical: props.marginVertical ? props.marginVertical : undefined
+        }
+      ]}>
+        <View style={[styles.boxContainer]}>
           <View style={[styles.box]}>
-            <Text style={[styles.text]}>{props.date.getHours().toString().length == 1 ? `0${props.date.getHours()}` : `${props.date.getHours()}`}</Text>
+            {props.date && <Text style={[styles.text]}>{props.date.getHours().toString().length == 1 ? `0${props.date.getHours()}` : `${props.date.getHours()}`}</Text>
+            }
           </View>
           <Text style={[styles.desc]}>Hours</Text>
-      </View>
-
-
-        <Text style={[styles.text, {marginHorizontal: 10}]}>:</Text>
-
-      <View style={[styles.boxContainer]}>
-        <View style={[styles.box]}>
-            <Text style={[styles.text]}>{props.date.getMinutes().toString().length == 1 ? `0${props.date.getMinutes()}` : `${props.date.getMinutes()}`}</Text>
         </View>
-        <Text style={[styles.desc]}>Minutes</Text>
-       </View>
 
-  </TouchableOpacity>
-  {show &&
-      <DateTimePicker
+
+        <Text style={[styles.text, { marginHorizontal: 10 }]}>:</Text>
+
+        <View style={[styles.boxContainer]}>
+          <View style={[styles.box]}>
+            {props.date && <Text style={[styles.text]}>{props.date.getMinutes().toString().length == 1 ? `0${props.date.getMinutes()}` : `${props.date.getMinutes()}`}</Text>
+            }
+          </View>
+          <Text style={[styles.desc]}>Minutes</Text>
+        </View>
+
+      </TouchableOpacity>
+      {show &&
+        <DateTimePicker
           testID="dateTimePicker"
-          value={props.date}
+          value={props.date || new Date()}
           mode='time'
           is24Hour={true}
           display='clock'
           onChange={onChange}
-       />
-  }
-  {props.error && (
-      <Text style={styles.text_ERROR}>Date is required</Text>
-    )}
-  </>
-);
+        />
+      }
+      {props.error && (
+        <Text style={styles.text_ERROR}>Date is required</Text>
+      )}
+    </>
+  );
 };
 
 export default TimePicker;

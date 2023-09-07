@@ -2,9 +2,7 @@
 export type StopLocationProp = {
 
     name?: string,
-    city?: string,
-    lat?: number,
-    lon?: number
+    city?: string, 
 }
 
 
@@ -17,6 +15,11 @@ export type TaskProps = {
     id?: string,
     type?: TaskType,
     note?: string,
+    refId?: string, // pooler plan or planner plan id
+    ownerId?: string,
+
+    isCronTask?: boolean,
+    cron?: string,
     
     from?: StopLocationProp,
     to?: StopLocationProp,
@@ -24,11 +27,12 @@ export type TaskProps = {
     fromHour?: string,
     toHour?: string,
 
-    fromDate?: string,
-    toDate?: string,
+    fromDate?: Date,
+    toDate?: Date,
+    createdAt?: Date,
 
-    priority?: number,
-    status: TaskStatus
+    priority?: string,
+    status?: TaskStatus
 
 }
 

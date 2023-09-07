@@ -8,8 +8,8 @@ import DateTimePicker, {
 import { RootState, useAppSelector } from "@store/store";
 
 interface DatePickerProps {
-  date: Date;
-  setDate: Function;
+  date?: Date;
+  setDate: (date: Date) => void;
   shadow?: boolean;
   bgColor?: string;
   marginHorizontal?: number;
@@ -35,15 +35,15 @@ const DatePicker = (props: DatePickerProps) => {
           props.shadow != null && props.shadow
             ? styles.shadowProp
             : props.shadow != null && !props.shadow
-            ? undefined
-            : styles.shadowProp,
+              ? undefined
+              : styles.shadowProp,
           props.error
             ? styles.container_ERROR
             : props.date
-            ? styles.container_GOOD
-            : settingState.setting.isDarkMode
-            ? styles.container_DARK
-            : styles.container_NORMAL,
+              ? styles.container_GOOD
+              : settingState.setting.isDarkMode
+                ? styles.container_DARK
+                : styles.container_NORMAL,
           {
             backgroundColor: props.bgColor ? props.bgColor : undefined,
             marginVertical: props.marginVertical
@@ -52,19 +52,28 @@ const DatePicker = (props: DatePickerProps) => {
           },
         ]}
       >
-        <Text
-          style={[
-            settingState.setting.isDarkMode ? styles.text_DARK : styles.text,
-          ]}
-        >{`${props.date.getDate()} / ${
-          props.date.getMonth() + 1 > 9 ? props.date.getMonth() + 1 : '0'+(props.date.getMonth() + 1)
-        } / ${props.date.getFullYear()}`}</Text>
+        {
+
+          <Text
+            style={[
+              settingState.setting.isDarkMode ? styles.text_DARK : styles.text,
+            ]}
+          >
+
+            {props.date && `${props.date.getDate()} / ${props.date.getMonth() + 1 > 9 ? props.date.getMonth() + 1 : '0' + (props.date.getMonth() + 1)
+              } / ${props.date.getFullYear()}`}
+
+
+          </Text>
+
+        }
+
         <Ionicons name="calendar" size={20} color={Colors.grayTone3} />
       </TouchableOpacity>
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={props.date}
+          value={props.date || new Date()}
           mode="date"
           is24Hour={true}
           display="calendar"

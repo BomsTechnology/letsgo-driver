@@ -6,6 +6,8 @@ import TimetableScreen from "@screens/profile/TimetableScreen";
 import IdentityPieceScreen from "@screens/profile/IdentityPieceScreen";
 import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScreen";
 import AddTaskScreen from "@screens/AddTaskScreen";
+import ChatScreen from "@screens/ChatScreen";
+import ViewTaskScreen from "@screens/ViewTaskScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -41,9 +43,19 @@ const StackNavigator = (stack: any) => {
         component={PersonnalInformationScreen}
         options={{ headerShown: false }}
       />
-       <stack.Screen
+      <stack.Screen
         name="AddUpdateTaskScreen"
         component={AddTaskScreen}
+        options={{ headerShown: false }}
+      />
+            <stack.Screen
+        name="ViewTaskScreen"
+        component={ViewTaskScreen}
+        options={{ headerShown: false }}
+      />
+      <stack.Screen
+        name="Chat"
+        component={ChatScreen}
         options={{ headerShown: false }}
       />
     </>
