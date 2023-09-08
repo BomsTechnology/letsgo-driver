@@ -70,7 +70,7 @@ const ImageSliderModal = ({modalVisible, setModalVisible}: ImageSliderModalProps
             <FlatList
                 data={images}
                 horizontal
-                showsHorizontalScrollIndicator={false}
+                showsHorizontalScrollIndicator={true}
                 pagingEnabled
                 bounces={true}
                 renderItem={renderItem}

@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "@navigators/AppNavigator";
 import { Switch } from "react-native";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
+import { FAB } from "react-native-paper";
 
 
 interface optionsProps {
@@ -145,6 +146,12 @@ const ProfileScreen = () => {
         }
       >
         <SimpleHeader text="Manage Profile" />
+        <FAB
+        icon="eye"
+        color={Colors.secondaryColor}
+        style={styles.fab}
+        onPress={() => console.log('Pressed')}
+      />
         <FlatList
           data={options}
           showsHorizontalScrollIndicator={false}
@@ -161,6 +168,15 @@ const ProfileScreen = () => {
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    borderRadius: 9999,
+    backgroundColor: Colors.primaryColor,
+    color: Colors.onPrimaryColor
+  },
     container: {
       flex: 1,
       backgroundColor: Colors.whiteTone2,

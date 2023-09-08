@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Image, View, Text, StyleSheet, TouchableOpacity,ScrollView } from "react-native";
 import SimpleHeader from "@components/SimpleHeader";
 import Colors from "@constants/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import CustomInput from "@components/inputFields/CustomInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
-import { ScrollView } from "react-native-gesture-handler";
 import {
   getUserInfo,
   updateUserInfo

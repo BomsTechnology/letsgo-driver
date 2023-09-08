@@ -8,14 +8,15 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "@navigators/AppNavigator";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SimpleHeader from "@components/SimpleHeader";
+import SearchTopTabNavigator from '../navigators/SearchTopTabNavigator';
 
 const SearchScreen = () => {
-    const settingState = useAppSelector((state: RootState) => state.setting);
-    const menuIcon = (
-      <Ionicons name="menu" size={25} color={Colors.primaryColor} />
-    );
-    const navigation =
-      useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const settingState = useAppSelector((state: RootState) => state.setting);
+  const menuIcon = (
+    <Ionicons name="menu" size={25} color={Colors.primaryColor} />
+  );
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   return (
     <SafeAreaView
       style={
@@ -25,27 +26,28 @@ const SearchScreen = () => {
       }
     >
       <SimpleHeader
-      text="Search"
-      LeftbuttonAction={() => {
-        navigation.dispatch(DrawerActions.toggleDrawer());
-      }}
-      LeftbuttonIcon={menuIcon}
-    />
+        text="Search"
+        LeftbuttonAction={() => {
+          navigation.dispatch(DrawerActions.toggleDrawer());
+        }}
+        LeftbuttonIcon={menuIcon}
+      />
+      <SearchTopTabNavigator/>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default SearchScreen
+export default SearchScreen;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: Colors.whiteTone1,
-      padding: 20,
-    },
-    container_DARK: {
-      flex: 1,
-      backgroundColor: Colors.darkTone1,
-      padding: 20,
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: Colors.whiteTone1,
+    padding: 20,
+  },
+  container_DARK: {
+    flex: 1,
+    backgroundColor: Colors.darkTone1,
+    padding: 20,
+  },
+});
