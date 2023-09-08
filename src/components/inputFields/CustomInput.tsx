@@ -20,6 +20,7 @@ interface CustomInputProps {
     marginHorizontal?: number;
     marginVertical?: number;
     fontSize?: number;
+    multiline?: boolean;
   }
 
 const CustomInput = (props: CustomInputProps) => {
@@ -40,7 +41,8 @@ const CustomInput = (props: CustomInputProps) => {
               error ? styles.container_ERROR : value  ? styles.container_GOOD : styles.container_NORMAL,
               {
                 backgroundColor: props.bgColor ? props.bgColor : undefined,
-                marginVertical: props.marginVertical ? props.marginVertical : undefined
+                marginVertical: props.marginVertical ? props.marginVertical : undefined,
+                height: props.multiline ? 100 : 50
               }
             ]}>
             {(props.prefixType == 'icon' && props.prefix ) && (
@@ -75,6 +77,7 @@ const CustomInput = (props: CustomInputProps) => {
                 ]}
                 secureTextEntry={props.secureTextEntry}
                 keyboardType={!props.keyboardType ? "default" : props.keyboardType}
+                multiline={props.multiline ? props.multiline : false}
               />
               
             {(props.sufixType == 'icon' && props.sufix )&& (
@@ -138,14 +141,14 @@ const styles = StyleSheet.create({
     },
     input: {
       flex:1,
-      height: 50,
+      height: '100%',
       color: Colors.grayTone1,
       fontFamily: 'Poppins_300Light',
       fontSize: 16,
     },
     input_DARK: {
       flex:1,
-      height: 50,
+      height: '100%',
       color: Colors.onPrimaryColor,
       fontFamily: 'Poppins_300Light',
       fontSize: 16,
