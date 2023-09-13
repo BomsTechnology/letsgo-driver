@@ -45,6 +45,7 @@ const AppNavigator = () => {
   const authState = useAppSelector((state: RootState) => state.auth);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [isLoggin, setIsLoggin] = useState(false);
   const [setting, setSetting] = useState<SettingProps | null>(null);
   const checkIsAuth = async () => {
     setLoading(true);
@@ -54,8 +55,9 @@ const AppNavigator = () => {
     await dispatch(checkAuth(setg))
       .unwrap()
       .then(async (data) => {
+        setIsLoggin(true)
         setLoading(false);
-        showSuccess(`Hello Traveller`);
+        showSuccess(`Hello Driver`);
       })
       .catch((error) => {
         setLoading(false);
@@ -77,7 +79,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
         <Stack.Navigator>
-          {authState.token != null 
+          {isLoggin
             ? AppStackNavigator(Stack)
             : AuthStackNavigator(Stack)}
         </Stack.Navigator>

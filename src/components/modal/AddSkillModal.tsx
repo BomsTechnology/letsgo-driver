@@ -1,30 +1,74 @@
 import { Modal, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import IconButton from "@components/buttons/IconButton";
 import Colors from "@constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import CustomInput from "@components/inputFields/CustomInput";
 import CustomButton from "@components/buttons/CustomButton";
 import { useForm } from "react-hook-form";
+import { addOrUpdateDriverSkill } from "@services/useDriver";
+import { DriverSkill } from "@mytypes/TimeTableProps";
+import { RootState, useAppDispatch, useAppSelector } from "@store/store";
+import { showError, showSuccess } from "@functions/helperFunctions";
 
 interface AddSkillModalProps {
   modalVisible: boolean;
   setModalVisible: Function;
+  skill: DriverSkill;
+  setSkill: Function
 }
 
 const AddSkillModal = ({
   modalVisible,
   setModalVisible,
+  skill,
+  setSkill
 }: AddSkillModalProps) => {
+  const [isEdit, setIsEdit] = React.useState(true);
+  const driverState = useAppSelector((state: RootState) => state.driver);
+  const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     //formState: {errors},
   } = useForm();
+  const name = watch("name");
+  const description = watch("description");
   const closeIcon = (
     <Ionicons name="close" size={20} color={Colors.whiteTone1} />
   );
+
+  const addOrUpdateSkill = async () => {
+    await dispatch(
+      addOrUpdateDriverSkill({
+        name: name,
+        desc: description,
+      })
+    )
+      .unwrap()
+      .then((driver) => {
+        setSkill(undefined)
+        setModalVisible(false);
+        showSuccess("Add Succes");
+      })
+      .catch((error) => {
+        showError(error.message);
+      });
+  };
+
+  useEffect(() => {
+    if (skill) {
+      setValue("name", skill?.name);
+      setValue("description", skill?.desc);
+      setIsEdit(false);
+    }else{
+      setValue("name", "");
+      setValue("description", "");
+      setIsEdit(true);
+    }
+  }, [skill]);
 
   return (
     <Modal
@@ -32,6 +76,7 @@ const AddSkillModal = ({
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
+        setSkill(null)
         setModalVisible(!modalVisible);
       }}
     >
@@ -40,7 +85,10 @@ const AddSkillModal = ({
           <IconButton
             bgColor={Colors.secondaryColor}
             icon={closeIcon}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setSkill(null)
+              setModalVisible(false)
+            }}
           />
         </View>
         <View style={styles.modalContainer}>
@@ -55,6 +103,7 @@ const AddSkillModal = ({
             rules={{
               required: "The name is required",
             }}
+            editable={isEdit}
           />
 
           <Text style={styles.description}>Description</Text>
@@ -75,10 +124,11 @@ const AddSkillModal = ({
             bgColor={Colors.primaryColor}
             fgColor="#fff"
             isReady={true}
-            onPress={handleSubmit(() => {})}
+            onPress={handleSubmit(addOrUpdateSkill)}
             text="Save"
             fontSize={14}
             marginVertical={20}
+            loading={driverState.loading}
           />
         </View>
       </View>

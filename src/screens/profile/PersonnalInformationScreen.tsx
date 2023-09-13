@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, StyleSheet, TouchableOpacity,ScrollView } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import SimpleHeader from "@components/SimpleHeader";
 import Colors from "@constants/colors";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,10 +15,7 @@ import { useForm } from "react-hook-form";
 import CustomInput from "@components/inputFields/CustomInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
-import {
-  getUserInfo,
-  updateUserInfo
-} from "@services/useUser";
+import { getUserInfo, updateUserInfo } from "@services/useUser";
 import { showError, showSuccess } from "@functions/helperFunctions";
 import DatePicker from "@components/inputFields/DatePicker";
 import CustomDropdownInput, {
@@ -19,15 +23,15 @@ import CustomDropdownInput, {
 } from "@components/inputFields/CustomDropdownInput";
 
 const PersonnalInformationScreen = () => {
-  const settingState = useAppSelector(
-    (state: RootState) => state.setting
-  );
-  const userState = useAppSelector((state: RootState) => state.user);
+  const settingState = useAppSelector((state: RootState) => state.setting);
+  const driverState = useAppSelector((state: RootState) => state.driver);
   const dispatch = useAppDispatch();
   const [asError, setAsError] = useState(false);
   const [birthdate, setBirthdate] = useState(new Date());
   const [errorMessage, setErrorMessage] = useState("");
-  const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(undefined);
+  const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(
+    undefined
+  );
   const [selected, setSelected] = useState("");
   const genderData: DropDataProps[] = [
     { key: "1", value: "Male" },
@@ -45,12 +49,14 @@ const PersonnalInformationScreen = () => {
   const lastname = watch("lastname");
 
   const editProfile = async () => {
-    await dispatch(updateUserInfo({
-      firstName: firstname,
-      lastName: lastname,
-      gender: selected,
-      birthdate: birthdate.toISOString().split("T")[0],
-    }))
+    await dispatch(
+      updateUserInfo({
+        firstName: firstname,
+        lastName: lastname,
+        gender: selected,
+        birthdate: birthdate.toISOString().split("T")[0],
+      })
+    )
       .unwrap()
       .then((data) => {
         showSuccess("User Data Update");
@@ -72,23 +78,33 @@ const PersonnalInformationScreen = () => {
   };
 
   useEffect(() => {
-    if (!userState.user) refreshData();
-    
+    if (!driverState.driver) refreshData();
+
     setValue(
       "firstname",
-      userState.user?.firstName ? userState.user?.firstName : ""
+      driverState.driver?.firstName ? driverState.driver?.firstName : ""
     );
     setValue(
       "lastname",
-      userState.user?.lastName ? userState.user?.lastName : ""
+      driverState.driver?.lastName ? driverState.driver?.lastName : ""
     );
-    console.log(userState.user?.gender);
-    if(userState.user?.birthdate) setBirthdate(new Date(Date.parse(userState.user?.birthdate)));
-    if(userState.user?.gender) setDefaultGender(genderData.filter((g) => g.value == userState.user?.gender)[0])
+    console.log(driverState.driver?.gender);
+    if (driverState.driver?.birthdate)
+      setBirthdate(new Date(Date.parse(driverState.driver?.birthdate)));
+    if (driverState.driver?.gender)
+      setDefaultGender(
+        genderData.filter((g) => g.value == driverState.driver?.gender)[0]
+      );
   }, []);
 
   return (
-    <SafeAreaView style={settingState.setting.isDarkMode ? styles.container_DARK : styles.container}>
+    <SafeAreaView
+      style={
+        settingState.setting.isDarkMode
+          ? styles.container_DARK
+          : styles.container
+      }
+    >
       <View style={{ paddingHorizontal: 20 }}>
         <SimpleHeader text="Profile" />
         <View
@@ -113,60 +129,131 @@ const PersonnalInformationScreen = () => {
             }}
           >
             <TouchableOpacity
-               style={settingState.setting.isDarkMode ? styles.actionBtn_DARK : styles.actionBtn}
+              style={
+                settingState.setting.isDarkMode
+                  ? styles.actionBtn_DARK
+                  : styles.actionBtn
+              }
             >
               <Ionicons name="pencil" size={16} color={Colors.primaryColor} />
-              <Text style={{ 
-                color: settingState.setting.isDarkMode ? Colors.onPrimaryColor : Colors.onWhiteTone
-               }}>Edit avatar</Text>
+              <Text
+                style={{
+                  color: settingState.setting.isDarkMode
+                    ? Colors.onPrimaryColor
+                    : Colors.onWhiteTone,
+                }}
+              >
+                Edit avatar
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={settingState.setting.isDarkMode ? styles.actionBtn_DARK : styles.actionBtn}
+              style={
+                settingState.setting.isDarkMode
+                  ? styles.actionBtn_DARK
+                  : styles.actionBtn
+              }
             >
               <Ionicons name="trash" size={16} color={Colors.errorInputColor} />
-              <Text style={{ 
-                color: settingState.setting.isDarkMode ? Colors.onPrimaryColor : Colors.onWhiteTone
-               }}>Delete Picture</Text>
+              <Text
+                style={{
+                  color: settingState.setting.isDarkMode
+                    ? Colors.onPrimaryColor
+                    : Colors.onWhiteTone,
+                }}
+              >
+                Delete Picture
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-      
+
       <ScrollView
-        style={[settingState.setting.isDarkMode ? styles.contentScroll_DARK : styles.contentScroll]}
+        style={[
+          settingState.setting.isDarkMode
+            ? styles.contentScroll_DARK
+            : styles.contentScroll,
+        ]}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>Last Name</Text>
+        <Text
+          style={
+            settingState.setting.isDarkMode
+              ? styles.semiBoldText_DARK
+              : styles.semiBoldText
+          }
+        >
+          Last Name
+        </Text>
         <CustomInput
           placeholder="Enter your Last Name"
           name="lastname"
           control={control}
           secureTextEntry={false}
-          bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone2}
+          bgColor={
+            settingState.setting.isDarkMode
+              ? Colors.darkTone2
+              : Colors.whiteTone2
+          }
           rules={{
             required: "The Last Name is required",
           }}
         />
-        <Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>First Name</Text>
+        <Text
+          style={[
+            settingState.setting.isDarkMode
+              ? styles.semiBoldText_DARK
+              : styles.semiBoldText,
+            { marginTop: 10 },
+          ]}
+        >
+          First Name
+        </Text>
         <CustomInput
           placeholder="Enter your First Name"
           name="firstname"
           control={control}
           secureTextEntry={false}
-          bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone2}
+          bgColor={
+            settingState.setting.isDarkMode
+              ? Colors.darkTone2
+              : Colors.whiteTone2
+          }
           rules={{
             required: "The First Name is required",
           }}
         />
 
-        <Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>Birth Date</Text>
+        <Text
+          style={[
+            settingState.setting.isDarkMode
+              ? styles.semiBoldText_DARK
+              : styles.semiBoldText,
+            { marginTop: 10 },
+          ]}
+        >
+          Birth Date
+        </Text>
         <DatePicker
           date={birthdate}
           setDate={setBirthdate}
-          bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone1}
+          bgColor={
+            settingState.setting.isDarkMode
+              ? Colors.darkTone2
+              : Colors.whiteTone1
+          }
         />
 
-        <Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>Gender</Text>
+        <Text
+          style={[
+            settingState.setting.isDarkMode
+              ? styles.semiBoldText_DARK
+              : styles.semiBoldText,
+            { marginTop: 10 },
+          ]}
+        >
+          Gender
+        </Text>
         <CustomDropdownInput
           placeholder="Select your gender"
           data={genderData}
@@ -184,7 +271,7 @@ const PersonnalInformationScreen = () => {
           onPress={handleSubmit(editProfile)}
           marginVertical={30}
           text="update profile"
-          loading={userState.loading}
+          loading={driverState.loading}
         />
       </ScrollView>
     </SafeAreaView>
@@ -264,6 +351,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
-  }
+  },
 });
 export default PersonnalInformationScreen;

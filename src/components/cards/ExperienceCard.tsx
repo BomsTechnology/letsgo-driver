@@ -1,4 +1,5 @@
 import {
+  GestureResponderEvent,
   ImageSourcePropType,
   StyleSheet,
   Text,
@@ -19,7 +20,15 @@ export interface ExperienceCardProps {
   attachements?: ImageSourcePropType[];
 }
 
-const ExperienceCard = ({ props }: { props: ExperienceCardProps }) => {
+const ExperienceCard = ({
+  props,
+  onDelete,
+  onUpdate,
+}: {
+  props: ExperienceCardProps;
+  onDelete: (event: GestureResponderEvent) => void;
+  onUpdate: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
@@ -31,10 +40,10 @@ const ExperienceCard = ({ props }: { props: ExperienceCardProps }) => {
           <Text style={[styles.text]}>{props.description}</Text>
         </View>
         <View style={{ gap: 5 }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onDelete}>
             <Ionicons
               name="trash-outline"
               size={17}
@@ -43,7 +52,7 @@ const ExperienceCard = ({ props }: { props: ExperienceCardProps }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ flexDirection: "row", gap: 10, flexWrap: 'wrap' }}>
+      <View style={{ flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
         {props.attachements &&
           props.attachements.map((image, i) => (
             <TouchableOpacity key={i} style={styles.image}>
@@ -84,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteTone1,
     marginTop: 10,
     width: "30%",
-    flexShrink:0,
+    flexShrink: 0,
     borderRadius: 10,
   },
 });

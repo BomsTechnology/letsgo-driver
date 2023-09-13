@@ -1,4 +1,5 @@
 import {
+  GestureResponderEvent,
   Image,
   ImageSourcePropType,
   StyleSheet,
@@ -17,7 +18,9 @@ export interface IdentityCardProps {
   attachements?: ImageSourcePropType[];
 }
 
-const IdentityCard = ({ props }: { props: IdentityCardProps }) => {
+const IdentityCard = ({ props, onDelete,
+  onUpdate, }: { props: IdentityCardProps, onDelete: (event: GestureResponderEvent) => void;
+  onUpdate: (event: GestureResponderEvent) => void; }) => {
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
@@ -26,10 +29,10 @@ const IdentityCard = ({ props }: { props: IdentityCardProps }) => {
           <Text style={[styles.text]}>{props.provider}</Text>
         </View>
         <View style={{ gap: 5 }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onDelete}>
             <Ionicons
               name="trash-outline"
               size={17}

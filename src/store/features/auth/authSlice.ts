@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { sendOTP, checkAuth, verifyOTP, logout } from '@services/useAuth';
+import { sendOTP, createDriverAccount, verifyOTP, logout, refreshTokens } from '@services/useAuth';
 
 export interface AuthStateTokenProps {
   "access_token": string | null;
@@ -13,7 +13,6 @@ export interface AuthStateTokenProps {
 export interface AuthState {
   "loading": boolean;
   "token": AuthStateTokenProps | null;
-  "isFirstLogin": boolean;
   "verificationId"?: string | null;
   "error": string | null;
 }
@@ -22,7 +21,6 @@ export interface AuthState {
 const initialState: AuthState = {
   "token": null,
   "loading": false,
-  "isFirstLogin": true,
   "error": null,
 };
 
@@ -30,9 +28,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setIsFirstLogin: (state, action: PayloadAction<boolean>) => {
-      state.isFirstLogin = action.payload;
-    },
+    
   },
   extraReducers: (builder) => {
     builder
@@ -50,22 +46,6 @@ const authSlice = createSlice({
         state.verificationId =  null;
         state.error = action.error.message as string;
       })
-      .addCase(checkAuth.pending, (state) => {
-        state.loading = true;
-        state.isFirstLogin = true;
-        state.error = null;
-      })
-      .addCase(checkAuth.fulfilled, (state, action: PayloadAction<AuthStateTokenProps>) => {
-        state.loading = false;
-        state.isFirstLogin = false;
-        state.token = action.payload;
-      })
-      .addCase(checkAuth.rejected, (state, action) => {
-        state.loading = false;
-        state.isFirstLogin = true;
-        state.error = action.error.message as string;
-        state.token = null;
-      })
       .addCase(verifyOTP.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -75,6 +55,19 @@ const authSlice = createSlice({
         state.token = action.payload;
       })
       .addCase(verifyOTP.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message as string;
+        state.token = null;
+      })
+      .addCase(refreshTokens.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(refreshTokens.fulfilled, (state, action: PayloadAction<AuthStateTokenProps>) => {
+        state.loading = false;
+        state.token = action.payload;
+      })
+      .addCase(refreshTokens.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message as string;
         state.token = null;
@@ -93,10 +86,22 @@ const authSlice = createSlice({
         state.error = action.error.message as string;
         state.token = null;
         state.verificationId =  null;
-      });
+      })
+      .addCase(createDriverAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createDriverAccount.fulfilled, (state, action: PayloadAction<boolean>) => {
+        state.loading = false;
+      })
+      .addCase(createDriverAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.token =  null;
+        state.verificationId =  null;
+        state.error = action.error.message as string;
+      })
+      ;
   },
 });
-
-export const { setIsFirstLogin } = authSlice.actions;
 
 export default authSlice.reducer;
