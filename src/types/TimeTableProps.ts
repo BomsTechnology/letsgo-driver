@@ -118,7 +118,7 @@ export interface BusinessInformation {
     businessCode?: string,
     businessDescription?: string,
     isIndependent?: boolean,
-    isEntreprise: boolean,
+    isEntreprise?: boolean,
     yearsOfExperience?: number,
     docs?: string[],
     cvLink?: string,

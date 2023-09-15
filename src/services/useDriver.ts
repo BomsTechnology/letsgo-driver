@@ -78,7 +78,7 @@ export const changeDriverPricing = async (data: DriverPricing) => {
   });
 };
 
-export const updateDriverBusiness = async (data: BusinessInformation) => {
+/*export const updateDriverBusiness = async (data: BusinessInformation) => {
   return new Promise<Driver>(async (resolve, reject) => {
     const response = await axiosClient.put<Driver>(
       PREFIX_URL_WITHOUT_SLASH,
@@ -91,7 +91,61 @@ export const updateDriverBusiness = async (data: BusinessInformation) => {
       return reject(new Error("Une erreur réseau s'est produite"));
     }
   });
-};
+};*/
+
+export const updateDriverBusiness = createAsyncThunk<
+  Driver,
+  {
+    businessInformation: BusinessInformation;
+    files: { name: string; file: Blob }[];
+    oldFiles: string[];
+  }
+>(
+  "driver/updateDriverBusiness",
+  async (
+    data: {
+      businessInformation: BusinessInformation;
+      files: { name: string; file: Blob }[];
+      oldFiles: string[];
+    },
+    thunkAPI
+  ) => {
+    try {
+      const { setGalleriesFiles } = useFile();
+      const { driver } = thunkAPI.getState() as RootState;
+      
+      let deletedImages = driver.driver!.docs!.filter(
+          (image) => !data.oldFiles.includes(image)
+        );
+     
+      const uploadResponse = await setGalleriesFiles(
+        data.files,
+        "driver/docs",
+        deletedImages
+      );
+      console.log("oldFiles", data.oldFiles);
+      console.log("uploadResponse:", uploadResponse);
+      data.businessInformation.docs = [...data.oldFiles, ...uploadResponse];
+      console.log(
+        "data.businessInformation.attachments:",
+        data.businessInformation.docs
+      );
+      const response = await axiosClient.put<Driver>(
+        PREFIX_URL_WITHOUT_SLASH,
+        data.businessInformation
+      );
+      if (response.data != undefined) {
+        return response.data;
+      } else {
+        throw new Error("Une erreur réseau s'est produite");
+      }
+    } catch (error: any) {
+      throw new Error(
+        `Une erreur s'est produite : ${error.response.data.error}`
+      );
+    }
+  }
+);
 
 export const updateDriverProfile = async (data: Profile) => {
   return new Promise<Driver>(async (resolve, reject) => {

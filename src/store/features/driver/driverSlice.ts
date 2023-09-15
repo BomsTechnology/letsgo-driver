@@ -14,6 +14,7 @@ import {
   removeDriverExperience,
   addOrUpdateDriverLicence,
   removeDriverLicence,
+  updateDriverBusiness
 } from "@services/useDriver";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export interface driverState {
@@ -38,6 +39,22 @@ const driverSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    .addCase(updateDriverBusiness.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(
+      updateDriverBusiness.fulfilled,
+      (state, action: PayloadAction<Driver>) => {
+        state.loading = false;
+        state.driver = action.payload;
+        AsyncStorage.setItem("driver", JSON.stringify(state.driver));
+      }
+    )
+    .addCase(updateDriverBusiness.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message as string;
+    })
       .addCase(removeDriverLicence.pending, (state) => {
         state.loading = true;
         state.error = null;

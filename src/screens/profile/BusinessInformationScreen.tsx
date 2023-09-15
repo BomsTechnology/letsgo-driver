@@ -17,26 +17,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
 import { getUserInfo, updateUserInfo } from "@services/useUser";
 import { showError, showSuccess } from "@functions/helperFunctions";
-import DatePicker from "@components/inputFields/DatePicker";
-import CustomDropdownInput, {
-  DropDataProps,
-} from "@components/inputFields/CustomDropdownInput";
+import ImagePicker from "@components/inputFields/ImagePicker";
+import { getDriverInfo, updateDriverBusiness } from "@services/useDriver";
 
-const PersonnalInformationScreen = () => {
+const BusinessInformationScreen = () => {
   const settingState = useAppSelector((state: RootState) => state.setting);
   const driverState = useAppSelector((state: RootState) => state.driver);
   const dispatch = useAppDispatch();
-  const [asError, setAsError] = useState(false);
-  const [birthdate, setBirthdate] = useState(new Date());
-  const [errorMessage, setErrorMessage] = useState("");
-  const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(
-    undefined
-  );
-  const [selected, setSelected] = useState("");
-  const genderData: DropDataProps[] = [
-    { key: "1", value: "Male" },
-    { key: "2", value: "Female" },
-  ];
+  const [files, setFiles] = React.useState<{ name: string; file: Blob }[]>([]);
+  const [oldFiles, setOldFiles] = React.useState<string[]>([]);
+
   const {
     control,
     handleSubmit,
@@ -45,20 +35,28 @@ const PersonnalInformationScreen = () => {
     setValue,
   } = useForm();
 
-  const firstname = watch("firstname");
-  const lastname = watch("lastname");
+  const businessName = watch("businessName");
+  const businessDescription = watch("businessDescription");
+  const cvLink = watch("cvLink");
+  const yearsOfExperience = watch("yearsOfExperience");
 
   const editProfile = async () => {
     await dispatch(
-      updateUserInfo({
-        firstName: firstname,
-        lastName: lastname,
-        gender: selected,
-        birthdate: birthdate.toISOString().split("T")[0],
+      updateDriverBusiness({
+        businessInformation: {
+          businessName: businessName,
+          businessDescription: businessDescription,
+          cvLink: cvLink,
+          yearsOfExperience: yearsOfExperience,
+        },
+        files: files,
+        oldFiles: oldFiles,
       })
     )
       .unwrap()
       .then((data) => {
+        setFiles([])
+        setOldFiles(driverState.driver?.docs!);
         showSuccess("User Data Update");
       })
       .catch((error) => {
@@ -67,7 +65,7 @@ const PersonnalInformationScreen = () => {
   };
 
   const refreshData = async () => {
-    await dispatch(getUserInfo())
+    await dispatch(getDriverInfo())
       .unwrap()
       .then((data) => {
         showSuccess("User Data Refresh");
@@ -79,21 +77,23 @@ const PersonnalInformationScreen = () => {
 
   useEffect(() => {
     if (!driverState.driver) refreshData();
-
+    setOldFiles(driverState.driver?.docs!);
     setValue(
-      "firstname",
-      driverState.driver?.firstName ? driverState.driver?.firstName : ""
+      "businessName",
+      driverState.driver?.businessName ? driverState.driver?.businessName : ""
     );
     setValue(
-      "lastname",
-      driverState.driver?.lastName ? driverState.driver?.lastName : ""
+      "businessDescription",
+      driverState.driver?.businessDescription ? driverState.driver?.businessDescription : ""
     );
-    if (driverState.driver?.birthdate)
-      setBirthdate(new Date(Date.parse(driverState.driver?.birthdate)));
-    if (driverState.driver?.gender)
-      setDefaultGender(
-        genderData.filter((g) => g.value == driverState.driver?.gender)[0]
-      );
+    setValue(
+      "cvLink",
+      driverState.driver?.cvLink ? driverState.driver?.cvLink : ""
+    );
+    setValue(
+      "yearsOfExperience",
+      driverState.driver?.businessDescription ? driverState.driver?.yearsOfExperience?.toString() : ""
+    );
   }, []);
 
   return (
@@ -105,66 +105,7 @@ const PersonnalInformationScreen = () => {
       }
     >
       <View style={{ paddingHorizontal: 20 }}>
-        <SimpleHeader text="Profile" />
-        <View
-          style={[
-            {
-              justifyContent: "center",
-              alignItems: "center",
-            },
-          ]}
-        >
-          <Image
-            resizeMode="contain"
-            style={[styles.image]}
-            source={require("@assets/images/avatars/Avatar5.png")}
-          />
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 30,
-              marginTop: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={
-                settingState.setting.isDarkMode
-                  ? styles.actionBtn_DARK
-                  : styles.actionBtn
-              }
-            >
-              <Ionicons name="pencil" size={16} color={Colors.primaryColor} />
-              <Text
-                style={{
-                  color: settingState.setting.isDarkMode
-                    ? Colors.onPrimaryColor
-                    : Colors.onWhiteTone,
-                }}
-              >
-                Edit avatar
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                settingState.setting.isDarkMode
-                  ? styles.actionBtn_DARK
-                  : styles.actionBtn
-              }
-            >
-              <Ionicons name="trash" size={16} color={Colors.errorInputColor} />
-              <Text
-                style={{
-                  color: settingState.setting.isDarkMode
-                    ? Colors.onPrimaryColor
-                    : Colors.onWhiteTone,
-                }}
-              >
-                Delete Picture
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <SimpleHeader text="B. Information" />
       </View>
 
       <ScrollView
@@ -182,11 +123,11 @@ const PersonnalInformationScreen = () => {
               : styles.semiBoldText
           }
         >
-          Last Name
+          Business Name
         </Text>
         <CustomInput
-          placeholder="Enter your Last Name"
-          name="lastname"
+          placeholder="Enter your Business Name"
+          name="businessName"
           control={control}
           secureTextEntry={false}
           bgColor={
@@ -206,12 +147,13 @@ const PersonnalInformationScreen = () => {
             { marginTop: 10 },
           ]}
         >
-          First Name
+          Description
         </Text>
         <CustomInput
-          placeholder="Enter your First Name"
-          name="firstname"
+          placeholder="Enter your Business description"
+          name="businessDescription"
           control={control}
+          multiline={true}
           secureTextEntry={false}
           bgColor={
             settingState.setting.isDarkMode
@@ -231,16 +173,19 @@ const PersonnalInformationScreen = () => {
             { marginTop: 10 },
           ]}
         >
-          Birth Date
+          CV Link
         </Text>
-        <DatePicker
-          date={birthdate}
-          setDate={setBirthdate}
+        <CustomInput
+          placeholder="Enter your CV Link"
+          name="cvLink"
+          control={control}
+          secureTextEntry={false}
           bgColor={
             settingState.setting.isDarkMode
               ? Colors.darkTone2
-              : Colors.whiteTone1
+              : Colors.whiteTone2
           }
+          rules={{}}
         />
 
         <Text
@@ -251,22 +196,43 @@ const PersonnalInformationScreen = () => {
             { marginTop: 10 },
           ]}
         >
-          Gender
+          Year Of Experience
         </Text>
-        <CustomDropdownInput
-          placeholder="Select your gender"
-          data={genderData}
-          setSelected={setSelected}
-          search={false}
-          asError={asError}
-          errorMessage={errorMessage}
-          defaultOption={defaultGender}
+        <CustomInput
+          placeholder="0"
+          name="yearsOfExperience"
+          control={control}
+          secureTextEntry={false}
+          keyboardType="number-pad"
+          bgColor={
+            settingState.setting.isDarkMode
+              ? Colors.darkTone2
+              : Colors.whiteTone2
+          }
+          rules={{}}
+        />
+
+        <Text
+          style={[
+            settingState.setting.isDarkMode
+              ? styles.semiBoldText_DARK
+              : styles.semiBoldText,
+            { marginTop: 10 },
+          ]}
+        >
+          Business Images
+        </Text>
+        <ImagePicker
+          setFiles={setFiles}
+          files={files}
+          oldFiles={oldFiles}
+          setOldFiles={setOldFiles}
         />
 
         <CustomButton
           bgColor={Colors.primaryColor}
           fgColor="#fff"
-          isReady={selected && birthdate && lastname && firstname}
+          isReady={businessName && yearsOfExperience}
           onPress={handleSubmit(editProfile)}
           marginVertical={30}
           text="update"
@@ -276,6 +242,9 @@ const PersonnalInformationScreen = () => {
     </SafeAreaView>
   );
 };
+
+export default BusinessInformationScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -352,4 +321,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-export default PersonnalInformationScreen;
