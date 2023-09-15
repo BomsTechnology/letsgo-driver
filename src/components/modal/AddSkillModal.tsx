@@ -49,7 +49,7 @@ const AddSkillModal = ({
     )
       .unwrap()
       .then((driver) => {
-        setSkill(undefined)
+        setSkill(null)
         setModalVisible(false);
         showSuccess("Add Succes");
       })
@@ -116,14 +116,14 @@ const AddSkillModal = ({
             bgColor="#fff"
             multiline={true}
             rules={{
-              required: "The description is required",
+              
             }}
           />
 
           <CustomButton
             bgColor={Colors.primaryColor}
             fgColor="#fff"
-            isReady={true}
+            isReady={name}
             onPress={handleSubmit(addOrUpdateSkill)}
             text="Save"
             fontSize={14}

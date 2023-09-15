@@ -10,6 +10,7 @@ import {
 import React from "react";
 import Colors from "@constants/colors";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { HumanIdentity } from "@mytypes/TimeTableProps";
 
 export interface IdentityCardProps {
   title: string;
@@ -18,15 +19,36 @@ export interface IdentityCardProps {
   attachements?: ImageSourcePropType[];
 }
 
-const IdentityCard = ({ props, onDelete,
-  onUpdate, }: { props: IdentityCardProps, onDelete: (event: GestureResponderEvent) => void;
-  onUpdate: (event: GestureResponderEvent) => void; }) => {
+const IdentityCard = ({
+  props,
+  onDelete,
+  onUpdate,
+  onOpenSlider,
+}: {
+  props: HumanIdentity;
+  onDelete: (event: GestureResponderEvent) => void;
+  onUpdate: (event: GestureResponderEvent) => void;
+  onOpenSlider: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
         <View style={{ flex: 1 }}>
-          <Text style={[styles.name]}>{props.title}</Text>
-          <Text style={[styles.text]}>{props.provider}</Text>
+          <View style={{ flexDirection: "row", gap: 5 }}>
+            <Text style={[styles.text]}>{props.type}</Text>
+            {props.isVerified && props.verifiedAt && (
+              <Text style={[styles.text, { color: Colors.accentGreen }]}>
+                {" "}
+                - Verified
+              </Text>
+            )}
+          </View>
+
+          <Text style={[styles.name]}>{props.identityUId}</Text>
+          <Text style={[styles.text]}>
+            {`De ${props.issueAt} à ${props.expireAt}`}
+          </Text>
+          <Text style={[styles.text]}>{props.formattedIdentityProvider}</Text>
         </View>
         <View style={{ gap: 5 }}>
           <TouchableOpacity onPress={onUpdate}>
@@ -41,13 +63,17 @@ const IdentityCard = ({ props, onDelete,
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ flexDirection: "row", gap: 10, flexWrap: 'wrap' }}>
-        {props.attachements &&
-          props.attachements.map((image, i) => (
-            <TouchableOpacity key={i} style={styles.image}>
+      <View style={{ flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
+        {props.docs &&
+          props.docs.map((image, i) => (
+            <TouchableOpacity
+              onPress={onOpenSlider}
+              key={i}
+              style={styles.image}
+            >
               <Image
-                source={image}
-                resizeMode="contain"
+                source={{ uri: image }}
+                resizeMode="cover"
                 style={{ height: "100%", maxWidth: "100%" }}
               />
             </TouchableOpacity>
@@ -81,8 +107,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteTone1,
     marginTop: 10,
     width: "30%",
-    flexShrink:0,
+    flexShrink: 0,
     borderRadius: 10,
     height: 100,
+    overflow: "hidden",
   },
 });

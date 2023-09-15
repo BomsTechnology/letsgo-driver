@@ -88,7 +88,6 @@ const PersonnalInformationScreen = () => {
       "lastname",
       driverState.driver?.lastName ? driverState.driver?.lastName : ""
     );
-    console.log(driverState.driver?.gender);
     if (driverState.driver?.birthdate)
       setBirthdate(new Date(Date.parse(driverState.driver?.birthdate)));
     if (driverState.driver?.gender)

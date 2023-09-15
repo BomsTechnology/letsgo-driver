@@ -55,8 +55,8 @@ export interface DriverExperience {
 
     label: string,
     desc?: string,
-    starAt?: Date,
-    endAt?: Date,
+    startAt?: string,
+    endAt?: string,
     attachments?: string[]
 }
 
@@ -78,15 +78,13 @@ export interface Score {
 
 
 export interface HumanIdentity {
-
     identityUId?: string,
-    type?: "VISA" | "CNI" | "PERMIT" | "PASSPORT" | "SCHOOL_IDENTITY",
-    details?: string,
+    type?: "VISA" | "CNI" | "PERMIT" | "PASSPORT" | "SCHOOL_IDENTITY", 
     isVerified?: boolean,
-    issueAt?: Date,
-    expireAt?: Date,
-    createdAt?: Date,
-    verifiedAt?: Date,
+    issueAt?: string,
+    expireAt?: string,
+    createdAt?: string,
+    verifiedAt?: string,
     providerId?: string,
     docs?: string [],
     formattedIdentityProvider?: string 

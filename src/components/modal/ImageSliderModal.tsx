@@ -4,18 +4,16 @@ import Colors from '@constants/colors';
 const { width, height } = Dimensions.get('window');
 import {Ionicons} from '@expo/vector-icons';
 import IconButton from '@components/buttons/IconButton';
+import ImageCard, { ImageCardProps } from '@components/cards/ImageCard';
 
-interface slideImageProps {
-    id: string;
-    image: ImageSourcePropType;
-}
 
 interface ImageSliderModalProps {
     modalVisible: boolean;
     setModalVisible: Function;
+    images: string[]
 }
 
-const ImageSliderModal = ({modalVisible, setModalVisible}: ImageSliderModalProps) => {
+const ImageSliderModal = ({modalVisible, setModalVisible, images}: ImageSliderModalProps) => {
     
     const closeIcon = (<Ionicons
         name="close"
@@ -23,35 +21,7 @@ const ImageSliderModal = ({modalVisible, setModalVisible}: ImageSliderModalProps
         color={Colors.whiteTone1}
         /> );
 
-
-    const images: slideImageProps[] = [
-        {
-            "id": "1",
-            "image": require("@assets/images/redYaris.jpg")
-        },
-        {
-            "id": "2",
-            "image": require("@assets/images/redYaris2.jpg")
-        },
-        {
-            "id": "3",
-            "image": require("@assets/images/redYaris3.jpg")
-        }
-    ];
-
-    const renderItem = ({ item }: {item : slideImageProps}) =>{
-        return (
-          
-            <Image
-             source={ item.image}
-             resizeMode='cover'
-             style={{
-              height: 300,
-              width:  width *0.8,
-             }}
-            />
-        )
-      }
+    
 
     return (
         <Modal
@@ -71,10 +41,8 @@ const ImageSliderModal = ({modalVisible, setModalVisible}: ImageSliderModalProps
                 data={images}
                 horizontal
                 showsHorizontalScrollIndicator={true}
-                pagingEnabled
-                bounces={true}
-                renderItem={renderItem}
-                keyExtractor={(item)=>item.id}
+                renderItem={({item}: {item: string}) => <ImageCard image={item} />}
+                keyExtractor={(item, i)=> i.toString()}
                 style={{
                     backgroundColor: Colors.whiteTone1
                 }}
