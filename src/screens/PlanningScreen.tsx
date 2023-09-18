@@ -27,32 +27,61 @@ const PlanningScreen: React.FC = () => {
 	const getDate = (offset = 0) => CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
 
 	const currentDate = getDate();
-	const [selected, setSelected] = useState(currentDate);
-
-	
-	const [tasks, setTasks] = useState<TaskProps[]>(); 
+	const [selected, setSelected] = useState<string>(currentDate);
 
 
-	const refreshTaskList = ()=> {
+	const refreshTasks = useAppSelector((state: RootState) => state.task);
+
+
+
+
+
+	const [tasks, setTasks] = useState<{ [key: string]: TaskProps[] }>({});
+
+
+	const refreshTaskList = () => {
 
 		retrieveTasks()
-		.then(setTasks)
+			.then((tks) => {
+
+				setTasks(groupByDate(tks));
+			})
+
 	}
 
 
 	useEffect(() => {
 
-		refreshTaskList()
+		refreshTaskList();
 
-	}, [])
+	}, [refreshTasks])
 
 
-	const tasksByDate = { "": tasks }
+
+
+	const groupByDate = (tasks: TaskProps[]) => {
+
+		const groups = tasks.reduce<{ [key: string]: TaskProps[] }>((groups, task) => {
+
+			const date = task.fromDate;
+			if (!groups[date as string]) {
+				groups[date as string] = [];
+			}
+			groups[date as string].push(task);
+			return groups;
+		}, {});
+
+		return groups;
+	}
+
+
 
 
 
 	const renderItemTaskInfo = (value: ListRenderItemInfo<TaskProps>) => (
-		<TouchableOpacity onPress={() => navigation.navigate("ViewTaskScreen", { task: value.item })}>
+		<TouchableOpacity
+			onLongPress={() => navigation.navigate("ViewTaskScreen", { task: value.item })}
+			onPress={() => navigation.navigate("ViewTaskScreen", { task: value.item })}>
 			<Task {...value.item} />
 		</TouchableOpacity>
 	);
@@ -90,7 +119,7 @@ const PlanningScreen: React.FC = () => {
 					: styles.container
 			}
 		>
-			<View style={{paddingHorizontal: 20}}>
+			<View style={{ paddingHorizontal: 20 }}>
 				<SimpleHeader
 					text="Driver Planning"
 					LeftbuttonAction={() => {
@@ -132,7 +161,17 @@ const PlanningScreen: React.FC = () => {
 
 			<FlatList
 				contentContainerStyle={styles.taskContainer}
-				data={tasks} renderItem={renderItemTaskInfo}>
+				data={tasks[selected] && tasks[selected].sort((a, b) => {
+
+					if (a.fromHour > b.fromHour) {
+						return 1;
+					}
+					else {
+
+						return -1;
+					}
+
+				})} renderItem={renderItemTaskInfo}>
 			</FlatList>
 
 			<FAB

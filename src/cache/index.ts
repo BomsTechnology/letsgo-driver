@@ -25,7 +25,16 @@ export const savePlanningEntity = (entity: TaskProps) => {
 
 		db.transaction(tx => {
 
-			tx.executeSql(CREATE_PLANNING_TABLE_QUERY);
+			tx.executeSql(CREATE_PLANNING_TABLE_QUERY);			
+			tx.executeSql(
+				"delete from plannings where id = (?);"
+				,
+				[entity!.id!]
+				,
+				undefined
+				,
+				undefined
+			);
 	
 			tx.executeSql(INSERT_PLANNING_QUERY,
 	
@@ -33,7 +42,7 @@ export const savePlanningEntity = (entity: TaskProps) => {
 				,
 				(_result, _resultSet) => { resolve(entity)}
 				,
-				(_result, _error) => { reject(); return true; }
+				(_result, _error) => {reject(_error); return true; }
 			);
 	
 		});
@@ -107,7 +116,7 @@ export const retrieveTasks = () => {
 		db.transaction(tx => {
 
 			tx.executeSql(
-				"select * from notifications;"
+				"select * from plannings;"
 				,
 				undefined
 				,

@@ -131,7 +131,7 @@ const TimetableScreen: React.FC = () => {
 				<TimetableView
 					scrollViewRef={scrollViewRef}
 					entries={events_data}
-					pivotTime={0}
+					pivotTime={4}
 					pivotEndTime={24}
 					pivotDate={pivotDate}
 					onEventPress={onEventPress}

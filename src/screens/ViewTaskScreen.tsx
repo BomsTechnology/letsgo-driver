@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { RootState, useAppSelector } from '@store/store';
+import { RootState, useAppDispatch, useAppSelector } from '@store/store';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@constants/colors';
 import { AppStackParamList } from '@navigators/AppNavigator';
@@ -21,9 +21,11 @@ import CustomDropdownInput, {
 } from "@components/inputFields/CustomDropdownInput";
 import TimePicker from '@components/inputFields/TimePicker';
 import CustomInput from '@components/inputFields/CustomInput';
-import { TaskProps, TaskType } from '../types/TaskProps';
-import { createTask } from '@services/usePlanning';
+import { TaskProps, TaskStatus, TaskType } from '../types/TaskProps';
+import { changeTaskStatus, createTask } from '@services/usePlanning';
 import { savePlanningEntity } from '../cache/index';
+import { FAB } from 'react-native-paper';
+import { toggleRefresh } from '@store/features/task/taskSlice';
 
 
 
@@ -35,7 +37,9 @@ const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) =>
 
 	const settingState = useAppSelector((state: RootState) => state.setting);
 
-	const task = route.params.task;
+	const [task, setTask] = useState<TaskProps>(route.params.task);
+
+	const dispatch = useAppDispatch();
 
 
 	const [startTime, setStartTime] = useState<Date>(new Date());
@@ -67,19 +71,24 @@ const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) =>
 		{ key: "2", value: "URGENT" },
 	];
 
-	const handleSubmit = () => {
+	const handleSubmit = (status: TaskStatus) => {
 		let isValid = true;
-
 
 		if (isValid) {
 			//setErrors({});
+
+
+
+
+
 			console.log('validééééé');
 
-			createTask(task)
+			changeTaskStatus(status, task.id)
 				.then(savePlanningEntity)
 				.then((task) => {
 
-					navigation.replace("ViewTaskScreen", { task: task });
+					dispatch(toggleRefresh());
+					setTask(task);
 
 				})
 				.catch((err) => {
@@ -96,6 +105,8 @@ const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) =>
 
 	const [advencedVisible, setAdvencedVisible] = useState<boolean>(false);
 
+	const [open, setOpen] = useState<boolean>(false); 
+
 
 
 
@@ -109,53 +120,133 @@ const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) =>
 				/>
 			</View>
 
+			<FAB.Group
+				open={open}
+				visible
+				icon={open ? 'plus' : 'plus'}
+				actions={[
+					{ icon: 'pencil', onPress: () => console.log('Pressed add') },
+					{
+						icon: 'star',
+						label: 'Mark On going',
+						onPress: () => handleSubmit("ONGOING"),
+					},
+					{
+						icon: 'email',
+						label: 'Email',
+						onPress: () => console.log('Pressed email'),
+					},
+					{
+						icon: 'bell',
+						label: 'Remind',
+						onPress: () => console.log('Pressed notifications'),
+					},
+				]}
+				onStateChange={(state) => setOpen(state.open)}
+				onPress={() => {
+					if (open) {
+						// do something if the speed dial is open
+					}
+				}}
+			/>
+
+
+			<FAB
+				icon="pencil"
+				style={styles.fab}
+				onPress={() => navigation.navigate("AddUpdateTaskScreen", { task: task })}
+			/>
+
 			<ScrollView
 				style={[settingState.setting.isDarkMode ? styles.contentScroll_DARK : styles.contentScroll]}
 				showsVerticalScrollIndicator={false}
 			>
 
+				<CustomButton
+					bgColor={"orange"}
+					fgColor="#fff"
+					isReady={true}
+					onPress={(ev) => handleSubmit("ONGOING")}
+					marginVertical={0}
+					text={"Mark ONGOING"}
+					loading={false}
+				/>
+
+				<CustomButton
+					bgColor={"red"}
+					fgColor="#fff"
+					isReady={true}
+					onPress={(ev) => handleSubmit("ABORTED")}
+					marginVertical={4}
+					text={"Mark Aborted"}
+					loading={false}
+				/>
+
+				<CustomButton
+					bgColor={"green"}
+					fgColor="#fff"
+					isReady={true}
+					onPress={(ev) => handleSubmit("EXECUTED")}
+					marginVertical={4}
+					text={"Mark Executed"}
+					loading={false}
+				/>
+
+
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>From Date</Text>
 
-				<Text 
+				<Text
 					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
 				>
 
-					{task.fromDate?.toLocaleDateString()}
+					{task.fromDate as string}
 
 				</Text>
 
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>To Date</Text>
 
 
-				<Text 
+				<Text
 					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
 				>
 
-					{task.toDate?.toLocaleDateString()}
+					{task.toDate! as unknown as string}
 
 				</Text>
 
 				<Text style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>Heure De Debut </Text>
-				<TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
+
+				<Text
+					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
+				>
+
+					{task.fromHour! as unknown as string}
+
+				</Text>
 
 				<Text style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>Heure De Fin </Text>
-				<TimePicker bgColor='white' date={endTime} setDate={setEndTime} />
+
+				<Text
+					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
+				>
+
+					{task.toHour! as unknown as string}
+
+				</Text>
 
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>Task Type</Text>
 
-				<CustomDropdownInput
-					placeholder="Select type"
-					data={taskTypeData}
-					setSelected={setTaskType}
-					search={false}
-					asError={asError}
-					errorMessage={errorMessage}
-					defaultOption={defaultGender}
-				/>
+				<Text
+					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
+				>
+
+					{task.type! as unknown as string}
+
+				</Text>
 
 				<Text style={settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText}>Note</Text>
 
-				<Text 
+				<Text
 					style={{ width: "100%", marginVertical: 10, borderColor: Colors.primaryColor, borderRadius: 7, borderWidth: 0.5, padding: 10, }}
 				>
 
@@ -194,16 +285,6 @@ const ViewTaskScreen: React.FC<ViewTaskScreenProps> = ({ route, navigation }) =>
 
 				</View>
 
-
-				<CustomButton
-					bgColor={Colors.primaryColor}
-					fgColor="#fff"
-					isReady={true}
-					onPress={(ev) => handleSubmit()}
-					marginVertical={30}
-					text={"create task"}
-					loading={false}
-				/>
 
 			</ScrollView>
 
@@ -298,5 +379,37 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		paddingVertical: 5,
 		borderRadius: 10,
-	}
+	},
+	fab: {
+		position: 'absolute',
+		margin: 16,
+		right: 0,
+		bottom: 50,
+		zIndex: 50,
+		backgroundColor: Colors.primaryColor
+	},
+	fab1: {
+		position: 'absolute',
+		margin: 16,
+		right: 0,
+		bottom: 120,
+		zIndex: 50,
+		backgroundColor: "orange"
+	},
+	fab2: {
+		position: 'absolute',
+		margin: 16,
+		right: 0,
+		bottom: 50,
+		zIndex: 50,
+		backgroundColor: Colors.primaryColor
+	},
+	fab3: {
+		position: 'absolute',
+		margin: 16,
+		right: 0,
+		bottom: 50,
+		zIndex: 50,
+		backgroundColor: Colors.primaryColor
+	},
 });

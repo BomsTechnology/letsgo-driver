@@ -41,7 +41,7 @@ export const createTask = async (data: TaskProps, owner?: string) => {
 
 
 
-export const updateTask = async (data: TaskProps, taskId: string) => {
+export const updateTask = async (data: TaskProps, taskId?: string) => {
 
     return new Promise<TaskProps>(async (resolve, reject) => {
 
@@ -64,7 +64,7 @@ export const updateTask = async (data: TaskProps, taskId: string) => {
 
 
 
-export const changeTaskStatus = async (status: TaskStatus, taskId: string) => {
+export const changeTaskStatus = async (status: TaskStatus, taskId?: string) => {
 
     return new Promise<TaskProps>(async (resolve, reject) => {
 
@@ -72,6 +72,8 @@ export const changeTaskStatus = async (status: TaskStatus, taskId: string) => {
             await axiosClient.put<TaskProps>(PREFIX_URL + "/" + taskId + "/status?value=" + status);
 
         if (response.data != undefined) {
+
+            console.log(response.data)
 
             return resolve(response.data);
 

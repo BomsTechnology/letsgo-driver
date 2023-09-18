@@ -24,10 +24,10 @@ export type TaskProps = {
     from?: StopLocationProp,
     to?: StopLocationProp,
 
-    fromHour?: string,
-    toHour?: string,
+    fromHour: string,
+    toHour: string,
 
-    fromDate?: Date,
+    fromDate: string,
     toDate?: Date,
     createdAt?: Date,
 

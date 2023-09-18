@@ -41,10 +41,16 @@ export const TimetableView: React.FC<TimetableViewProps> = (props) => {
 
 
 	const genTimes = (pivotTime: number, endPivotTime: number) => {
+
 		const times = [];
-		for (let i = pivotTime; i < endPivotTime; i += 1) {
+		for (let i = pivotTime; i < 24; i += 1) {
 			times.push(i);
 		}
+
+		for (let i = 0; i < pivotTime; i += 1) {
+			times.push(i);
+		}
+
 		return times;
 	};
 
