@@ -1,7 +1,7 @@
 import axiosClient, { API_BASE_URL } from "@config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import UserProps from "../types/UserProps";
+import UserProps from "@mytypes/UserProps";
 
 const PREFIX_URL = 'AUTH-SERVICE/api/v0/';
 
@@ -13,7 +13,7 @@ export const createDriverAccount = createAsyncThunk<UserProps, void>(
         PREFIX_URL + "business/subscribe/letsgo/driver"
       );
 
-      if (response) {
+      if (response.data != undefined) {
         AsyncStorage.setItem("user", JSON.stringify(response.data));
         return response.data;
       } else {
@@ -34,7 +34,7 @@ export const getUserInfo = createAsyncThunk<UserProps, void>(
   async () => {
     try {
       const response = await axiosClient.get(PREFIX_URL + "userinfo");
-      if (response) {
+      if (response.data != undefined) {
         AsyncStorage.setItem("user", JSON.stringify(response.data));
         return response.data;
       } else {

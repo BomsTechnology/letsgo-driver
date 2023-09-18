@@ -1,4 +1,5 @@
 import {
+  GestureResponderEvent,
   ImageSourcePropType,
   StyleSheet,
   Text,
@@ -9,32 +10,34 @@ import React from "react";
 import Colors from "@constants/colors";
 import { Image } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { DriverExperience } from "@mytypes/TimeTableProps";
 
-export interface ExperienceCardProps {
-  title: string;
-  id: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  attachements?: ImageSourcePropType[];
-}
-
-const ExperienceCard = ({ props }: { props: ExperienceCardProps }) => {
+const ExperienceCard = ({
+  props,
+  onDelete,
+  onUpdate,
+  onOpenSlider,
+}: {
+  props: DriverExperience;
+  onDelete: (event: GestureResponderEvent) => void;
+  onUpdate: (event: GestureResponderEvent) => void;
+  onOpenSlider: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
         <View style={{ flex: 1 }}>
-          <Text style={[styles.name]}>{props.title}</Text>
+          <Text style={[styles.name]}>{props.label}</Text>
           <Text style={[styles.text]}>
-            {props.start_date} - {props.end_date}
+            {`De ${props.startAt} à ${props.endAt}`}
           </Text>
-          <Text style={[styles.text]}>{props.description}</Text>
+          <Text style={[styles.text]}>{props.desc}</Text>
         </View>
         <View style={{ gap: 5 }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onDelete}>
             <Ionicons
               name="trash-outline"
               size={17}
@@ -43,13 +46,17 @@ const ExperienceCard = ({ props }: { props: ExperienceCardProps }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ flexDirection: "row", gap: 10, flexWrap: 'wrap' }}>
-        {props.attachements &&
-          props.attachements.map((image, i) => (
-            <TouchableOpacity key={i} style={styles.image}>
+      <View style={{ flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
+        {props.attachments &&
+          props.attachments.map((image, i) => (
+            <TouchableOpacity
+              onPress={onOpenSlider}
+              key={i}
+              style={styles.image}
+            >
               <Image
-                source={image}
-                resizeMode="contain"
+                source={{ uri: image }}
+                resizeMode="cover"
                 style={{ height: "100%", maxWidth: "100%" }}
               />
             </TouchableOpacity>
@@ -84,7 +91,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.whiteTone1,
     marginTop: 10,
     width: "30%",
-    flexShrink:0,
+    flexShrink: 0,
     borderRadius: 10,
+    overflow: "hidden",
   },
 });

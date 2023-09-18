@@ -3,63 +3,64 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SimpleHeader from "@components/SimpleHeader";
 import Colors from "@constants/colors";
-import { RootState, useAppSelector } from "@store/store";
-import ExperienceCard, {
-  ExperienceCardProps,
-} from "@components/cards/ExperienceCard";
+import { RootState, useAppDispatch, useAppSelector } from "@store/store";
+import ExperienceCard from "@components/cards/ExperienceCard";
 import { FAB } from "react-native-paper";
 import ConfirmModal from "@components/modal/ConfirmModal";
 import ImageSliderModal from "@components/modal/ImageSliderModal";
 import AddExperienceModal from "@components/modal/AddExperienceModal";
+import { DriverExperience } from "@mytypes/TimeTableProps";
+import { showError, showSuccess } from "@functions/helperFunctions";
+import { removeDriverExperience } from "@services/useDriver";
 
 const ExperienceScreen = () => {
   const settingState = useAppSelector((state: RootState) => state.setting);
+  const driverState = useAppSelector((state: RootState) => state.driver);
   const [showImageModal, setShowImageModal] = React.useState(false);
   const [showAddExperienceModal, setShowAddExperienceModal] =
     React.useState(false);
   const [showConfirmModal, setShowConfirmModal] = React.useState(false);
-  const aletrs: ExperienceCardProps[] = [
-    {
-      id: "1",
-      start_date: "02/02/2022",
-      end_date: "02/02/2023",
-      title: "Marcelin Sigha",
-      description:
-        "Make the experience of making around the city easier, faster and alfordable",
-    },
-    {
-      id: "2",
-      start_date: "02/02/2022",
-      end_date: "02/02/2023",
-      title: "Letsgo",
-      description:
-        "Take the control over your trips costs and access whenever you need to your data",
-      attachements: [
-        require("@assets/images/logo.png"),
-        require("@assets/images/logo.png"),
-        require("@assets/images/logo.png"),
-        require("@assets/images/logo.png"),
-      ],
-    },
-    {
-      id: "3",
-      start_date: "02/02/2022",
-      end_date: "02/02/2023",
-      title: "New Transaction",
-      description:
-        "Share your trips with people doing same road and get exclusive discounts(even free trips)",
-      attachements: [require("@assets/images/logo.png")],
-    },
-  ];
+  const dispatch = useAppDispatch();
+  const [selectedExperience, setSelectedExperience] =
+    React.useState<DriverExperience | null>(null);
+
+  const openModalDelete = (xp: DriverExperience) => {
+    setSelectedExperience(xp);
+    setShowConfirmModal(true);
+  };
+
+  const openModalUpdate = (xp: DriverExperience) => {
+    setSelectedExperience(xp);
+    setShowAddExperienceModal(true);
+  };
+
+  const openModalSlider = (xp: DriverExperience) => {
+    setSelectedExperience(xp);
+    setShowImageModal(true);
+  };
+
+  const deleteExperience = async () => {
+    await dispatch(removeDriverExperience(selectedExperience!.label))
+      .unwrap()
+      .then((data) => {
+        setShowConfirmModal(false);
+        setSelectedExperience(null);
+        showSuccess("Remove Succes");
+      })
+      .catch((error) => {
+        showError(error.message);
+      });
+  };
+
   return (
     <>
       <ConfirmModal
         modalVisible={showConfirmModal}
         setModalVisible={setShowConfirmModal}
         cancelBtnAction={() => setShowConfirmModal(false)}
-        confirmBtnAction={() => null}
-        title={`Delete Skill`}
-        message={"Are you sure you want to Delete Skill?"}
+        confirmBtnAction={deleteExperience}
+        title={`Delete Experience`}
+        message={"Are you sure you want to Delete Experience?"}
         btnColor={Colors.accentOrange}
         cancelBtnLabel="No, Keep it"
         confirmBtnLabel={`Delete`}
@@ -67,10 +68,13 @@ const ExperienceScreen = () => {
       <ImageSliderModal
         modalVisible={showImageModal}
         setModalVisible={setShowImageModal}
+        images={selectedExperience?.attachments!}
       />
       <AddExperienceModal
         modalVisible={showAddExperienceModal}
         setModalVisible={setShowAddExperienceModal}
+        experience={selectedExperience!}
+        setExperience={setSelectedExperience}
       />
       <SafeAreaView
         style={
@@ -81,13 +85,18 @@ const ExperienceScreen = () => {
       >
         <SimpleHeader text="Experience" />
         <FlatList
-          data={aletrs}
-          renderItem={({ item }: { item: ExperienceCardProps }) => (
-            <ExperienceCard props={item} />
+          data={driverState.driver?.experiences}
+          renderItem={({ item }: { item: DriverExperience }) => (
+            <ExperienceCard
+              props={item}
+              onDelete={() => openModalDelete(item)}
+              onUpdate={() => openModalUpdate(item)}
+              onOpenSlider={() => openModalSlider(item)}
+            />
           )}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item, i) => i.toString()}
         />
         <FAB
           icon="plus"

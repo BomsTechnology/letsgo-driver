@@ -21,9 +21,13 @@ import {
 } from "@react-navigation/native-stack";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
 import { showError, showSuccess } from "@functions/helperFunctions";
-import { sendOTP, verifyOTP } from "@services/useAuth";
-import { setIsFirstLogin } from "@store/features/auth/authSlice";
-import { createDriverAccount, getUserInfo } from "@services/useUser";
+import {
+  sendOTP,
+  verifyOTP,
+  refreshTokens,
+  createDriverAccount,
+} from "@services/useAuth";
+import { upgradeToDriver, getDriverInfo } from "@services/useDriver";
 
 type Props = NativeStackScreenProps<AppStackParamList, "OTP">;
 const OTPScreen = ({ route }: Props) => {
@@ -44,23 +48,34 @@ const OTPScreen = ({ route }: Props) => {
     )
       .unwrap()
       .then(async (data) => {
-        console.log(data)
-        if (data.role?.includes("POLLER")) {
-          dispatch(setIsFirstLogin(false));
-          await dispatch(getUserInfo())
+        if (data.role?.includes("DRIVER")) {
+          await dispatch(upgradeToDriver())
             .unwrap()
-            .then((user) => {
-              showSuccess(`Bienvenue ${user.firstName == undefined ? user.principalPhone : user.firstName}`);
+            .then((driver) => {
+              showSuccess("Connexion reussi :)");
             })
             .catch((error) => {
               showError(error.message);
             });
         } else {
-          dispatch(setIsFirstLogin(true));
           await dispatch(createDriverAccount())
             .unwrap()
-            .then((data) => {
-              showSuccess("Connexion reussi :)");
+            .then(async (ds) => {
+              await dispatch(refreshTokens(data.refresh_token!))
+                .unwrap()
+                .then(async (d) => {
+                  await dispatch(upgradeToDriver())
+                    .unwrap()
+                    .then((driver) => {
+                      showSuccess("Connexion reussi :)");
+                    })
+                    .catch((error) => {
+                      showError(error.message);
+                    });
+                })
+                .catch((error) => {
+                  showError(error.message);
+                });
             })
             .catch((error) => {
               showError(error.message);
@@ -73,7 +88,10 @@ const OTPScreen = ({ route }: Props) => {
   };
 
   const goBack = async () => {
-    navigation.replace("Login", { countryCode:route.params.countryCode, phoneNumber: route.params.phoneNumber });
+    navigation.replace("Login", {
+      countryCode: route.params.countryCode,
+      phoneNumber: route.params.phoneNumber,
+    });
   };
 
   const resend = async () => {
@@ -120,7 +138,7 @@ const OTPScreen = ({ route }: Props) => {
 
       <Text style={styles.title}>What's the code?</Text>
       <Text style={styles.description}>
-        Type the 4-digit code we just sent to 
+        Type the 4-digit code we just sent to
         {route.params.countryCode.callingCode}
         {route.params.phoneNumber}
       </Text>
@@ -169,15 +187,14 @@ const OTPScreen = ({ route }: Props) => {
         </Text>
       </TouchableOpacity>
 
-
-        <CustomButton
-          bgColor={Colors.primaryColor}
-          fgColor="#fff"
-          isReady={isPinReady}
-          onPress={verify}
-          text="Verify it now"
-          loading={authState.loading}
-        />
+      <CustomButton
+        bgColor={Colors.primaryColor}
+        fgColor="#fff"
+        isReady={isPinReady}
+        onPress={verify}
+        text="Verify it now"
+        loading={authState.loading}
+      />
     </Pressable>
   );
 };

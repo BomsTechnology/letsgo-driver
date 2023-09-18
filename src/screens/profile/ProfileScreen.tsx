@@ -32,6 +32,22 @@ const ProfileScreen = () => {
 
   const options: optionsProps[] = [
     {
+      id: "7",
+      label: 'Business Information',
+      icon: (
+        <Ionicons
+          name="reader-outline"
+          size={25}
+          color={
+            settingState.setting.isDarkMode
+              ? Colors.grayTone3
+              : Colors.grayTone1
+          }
+        />
+      ),
+      onPress: () => navigation.navigate("BusinessInformation"),
+    },
+    {
       id: "6",
       label: 'Personnal Information',
       icon: (

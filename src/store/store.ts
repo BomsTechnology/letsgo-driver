@@ -4,11 +4,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import settingReducer from './features/setting/settingSlice';
 import userReducer from './features/user/userSlice';
 import taskReducer from './features/task/taskSlice'
+import driverReducer from './features/driver/driverSlice';
+
 
 export const store = configureStore({
   reducer: {
       auth: authReducer,
-      user: userReducer,
+      driver: driverReducer,
       setting: settingReducer,
       task: taskReducer,
   },

@@ -60,7 +60,7 @@ const DatePicker = (props: DatePickerProps) => {
             ]}
           >
 
-            {props.date && `${props.date.getDate()} / ${props.date.getMonth() + 1 > 9 ? props.date.getMonth() + 1 : '0' + (props.date.getMonth() + 1)
+            {props.date != undefined && `${props.date.getDate()} / ${props.date.getMonth() + 1 > 9 ? props.date.getMonth() + 1 : '0' + (props.date.getMonth() + 1)
               } / ${props.date.getFullYear()}`}
 
 
@@ -73,7 +73,7 @@ const DatePicker = (props: DatePickerProps) => {
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={props.date || new Date()}
+          value={props.date! || new Date()}
           mode="date"
           is24Hour={true}
           display="calendar"

@@ -2,12 +2,13 @@ import React from "react";
 import DrawerNavigator from "@navigators/DrawerNavigator";
 import SkillScreen from "@screens/profile/SkillScreen";
 import ExperienceScreen from "@screens/profile/ExperienceScreen";
-import TimetableScreen from "@screens/profile/TimetableScreen";
 import IdentityPieceScreen from "@screens/profile/IdentityPieceScreen";
 import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScreen";
 import AddTaskScreen from "@screens/AddTaskScreen";
 import ChatScreen from "@screens/ChatScreen";
 import ViewTaskScreen from "@screens/ViewTaskScreen";
+import TimetableScreen from "@screens/profile/TimeTableScreen";
+import BusinessInformationScreen from "@screens/profile/BusinessInformationScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -41,6 +42,11 @@ const StackNavigator = (stack: any) => {
       <stack.Screen
         name="PersonnalInformation"
         component={PersonnalInformationScreen}
+        options={{ headerShown: false }}
+      />
+      <stack.Screen
+        name="BusinessInformation"
+        component={BusinessInformationScreen}
         options={{ headerShown: false }}
       />
       <stack.Screen

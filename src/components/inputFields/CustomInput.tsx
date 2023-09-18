@@ -21,6 +21,7 @@ interface CustomInputProps {
     marginVertical?: number;
     fontSize?: number;
     multiline?: boolean;
+    editable?: boolean;
   }
 
 const CustomInput = (props: CustomInputProps) => {
@@ -41,6 +42,7 @@ const CustomInput = (props: CustomInputProps) => {
               error ? styles.container_ERROR : value  ? styles.container_GOOD : styles.container_NORMAL,
               {
                 backgroundColor: props.bgColor ? props.bgColor : undefined,
+                
                 marginVertical: props.marginVertical ? props.marginVertical : undefined,
                 height: props.multiline ? 100 : 50
               }
@@ -78,6 +80,7 @@ const CustomInput = (props: CustomInputProps) => {
                 secureTextEntry={props.secureTextEntry}
                 keyboardType={!props.keyboardType ? "default" : props.keyboardType}
                 multiline={props.multiline ? props.multiline : false}
+                editable={props.editable != undefined ? props.editable : true}
               />
               
             {(props.sufixType == 'icon' && props.sufix )&& (

@@ -6,7 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ExpoImagePicker from "expo-image-picker";
 import { showError } from "@functions/helperFunctions";
 
-const ImagePicker = () => {
+interface ImagePickerProps {
+  files: { name: string; file: Blob }[];
+  setFiles: Function;
+  oldFiles?: string[];
+  setOldFiles?: Function;
+}
+
+const ImagePicker = ({ files, setFiles, oldFiles, setOldFiles }: ImagePickerProps) => {
   const [attachements, setAttachements] = React.useState<string[]>([]);
 
   const pickImage = async () => {
@@ -23,7 +30,7 @@ const ImagePicker = () => {
       });
 
       if (!result.canceled) {
-        setAttachements([...attachements, result.assets[0].uri]);
+        await AddImage(result.assets[0].uri);
       }
     }
   };
@@ -41,18 +48,50 @@ const ImagePicker = () => {
       });
 
       if (!result.canceled) {
-        setAttachements([...attachements, result.assets[0].uri]);
+        await AddImage(result.assets[0].uri);
       }
     }
   };
 
   const removeImage = async (index: number) => {
     setAttachements(attachements.filter((_, i) => i !== index));
-  }
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const AddImage = async (uri: string) => {
+    setAttachements([...attachements, uri]);
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    setFiles([...files, { file: blob, name: uri.split("/").pop() }]);
+  };
+
+  const removeOldFile = async (index: number) => {
+    setOldFiles!(oldFiles?.filter((_, i) => i !== index));
+  };
 
   return (
     <View>
-      <View style={{ flexDirection: "row", gap: 10, flexWrap: 'wrap' }}>
+      <View style={{ flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
+      {oldFiles &&
+          oldFiles.map((image, i) => (
+            <View key={i} style={styles.image}>
+              <TouchableOpacity
+                style={[styles.shadowProp, styles.closeBtn]}
+                onPress={() => removeOldFile(i)}
+              >
+                <Ionicons
+                  name="close"
+                  size={15}
+                  color={Colors.secondaryColor}
+                />
+              </TouchableOpacity>
+              <Image
+                source={{ uri: image }}
+                resizeMode="cover"
+                style={{ height: "100%", maxWidth: "100%", width: "100%" }}
+              />
+            </View>
+          ))}
         {attachements &&
           attachements.map((image, i) => (
             <View key={i} style={styles.image}>
@@ -66,8 +105,11 @@ const ImagePicker = () => {
                   color={Colors.secondaryColor}
                 />
               </TouchableOpacity>
-              <Image  source={{ uri: image }} resizeMode="cover"
-                style={{ height: "100%", maxWidth: "100%",  width: '100%' }} />
+              <Image
+                source={{ uri: image }}
+                resizeMode="cover"
+                style={{ height: "100%", maxWidth: "100%", width: "100%" }}
+              />
             </View>
           ))}
         <View style={styles.image}>
@@ -96,7 +138,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 1,
     right: 1,
-    zIndex: 2
+    zIndex: 2,
   },
   shadowProp: {
     shadowColor: "#171717",
@@ -112,6 +154,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    overflow: 'hidden'
+    overflow: "hidden",
   },
 });

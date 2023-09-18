@@ -1,15 +1,24 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import Colors from "@constants/colors";
 import { SimpleLineIcons, Ionicons, AntDesign } from "@expo/vector-icons";
+import { DriverSkill } from "@mytypes/TimeTableProps";
 
-export interface SkillCardProps {
-  title: string;
-  id: string;
-  description: string;
-}
-
-const SkillCard = ({ props }: { props: SkillCardProps }) => {
+const SkillCard = ({
+  props,
+  onDelete,
+  onUpdate,
+}: {
+  props: DriverSkill;
+  onDelete: (event: GestureResponderEvent) => void;
+  onUpdate: (event: GestureResponderEvent) => void;
+}) => {
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1 }}>
@@ -19,15 +28,15 @@ const SkillCard = ({ props }: { props: SkillCardProps }) => {
             size={15}
             color={Colors.primaryColor}
           />
-          <Text style={[styles.name]}>{props.title}</Text>
+          <Text style={[styles.name]}>{props.name}</Text>
         </View>
-        <Text style={[styles.text]}>{props.description}</Text>
+        <Text style={[styles.text]}>{props.desc}</Text>
       </View>
-      <View style={{ gap:5 }}>
-        <TouchableOpacity>
+      <View style={{ gap: 5 }}>
+        <TouchableOpacity onPress={onUpdate}>
           <AntDesign name="edit" size={16} color={Colors.primaryColor} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onDelete}>
           <Ionicons
             name="trash-outline"
             size={17}
