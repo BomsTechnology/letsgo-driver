@@ -10,7 +10,6 @@ export interface GroupCharter {
 }
 
 export interface GroupRole {
-
     roleName: string,
     roleDescription?: string,
     timestamp?: string
@@ -18,7 +17,6 @@ export interface GroupRole {
 
 
 export interface SyndicatOffice {
-
     officeNumber: number,
     officeName: string,
     managerName?: string,
@@ -30,7 +28,6 @@ export interface SyndicatOffice {
 
 
 export interface SyndicatMember {
-
     joinAt?: string,
     memberId?: string,
     userId?: string,
@@ -42,7 +39,6 @@ export interface SyndicatMember {
 
 
 export interface Syndicat {
-
     syndicatId: string,
     shortName: string,
     jobTarget: string,
@@ -55,16 +51,17 @@ export interface Syndicat {
     roles: GroupRole[],
     charter: GroupCharter,
     offices?: SyndicatOffice[],
-    creator?: SyndicatMember
+    creator?: SyndicatMember,
+
+    
+    groupName?: string,
 }
 
 export type MembershipRequestStatus = "EMITTED" | "RECEIVED" | "ONGOING" | "DENIED" | "ACCEPTED"
 
 export interface MembershipRequest {
-
     requestId?: string,
     userId?: string,
-
     emittedAt?: string,
     receivedAt?: string,
     markedInProgressOn?: string,
@@ -75,6 +72,7 @@ export interface MembershipRequest {
     groupId?: string,
     claimedRoles?: GroupRole[],
     evaluateBy?: SyndicatMember,
+    syndicat?: Syndicat
 }
 
 

@@ -36,7 +36,6 @@ export const makeRequest = async (data: MemberRequestDTO) => {
 
 
 export interface SearchSyndicateField {
-
     query: string,
     page?: number,
 }

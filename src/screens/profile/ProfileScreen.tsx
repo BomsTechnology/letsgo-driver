@@ -128,7 +128,22 @@ const ProfileScreen = () => {
       onPress: () => navigation.navigate("TimeTable"),
     },
     
-    
+    {
+      id: "8",
+      label: 'Syndicat',
+      icon: (
+        <Ionicons
+          name="list-outline"
+          size={25}
+          color={
+            settingState.setting.isDarkMode
+              ? Colors.grayTone3
+              : Colors.grayTone1
+          }
+        />
+      ),
+      onPress: () => navigation.navigate("Syndicat"),
+    },
   ];
 
   const optionsItemRender = ({ item }: { item: optionsProps }) => {

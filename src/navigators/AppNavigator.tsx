@@ -25,7 +25,7 @@ export type AppStackParamList = {
   IdentityPiece: undefined;
   PersonnalInformation: undefined;
   BusinessInformation: undefined;
-
+  Syndicat: undefined;
   TimetableScreen: undefined;
   Chat: undefined,
   AddUpdateTaskScreen: {
