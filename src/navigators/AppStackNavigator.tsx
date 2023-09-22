@@ -9,6 +9,7 @@ import ChatScreen from "@screens/ChatScreen";
 import ViewTaskScreen from "@screens/ViewTaskScreen";
 import TimetableScreen from "@screens/profile/TimetableScreen";
 import BusinessInformationScreen from "@screens/profile/BusinessInformationScreen";
+import SyndicatScreen from "@screens/profile/SyndicatScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -62,6 +63,11 @@ const StackNavigator = (stack: any) => {
       <stack.Screen
         name="ChatScreen"
         component={ChatScreen}
+        options={{ headerShown: false }}
+      />
+      <stack.Screen
+        name="Syndicat"
+        component={SyndicatScreen}
         options={{ headerShown: false }}
       />
     </>
