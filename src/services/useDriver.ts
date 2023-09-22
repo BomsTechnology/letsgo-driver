@@ -12,7 +12,7 @@ import {
   Profile,
   WorkZone,
 } from "@mytypes/TimeTableProps";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { PREFIX_URL as AUTH_PREFIX_URL } from "@services/useAuth";
 import useFile from "./useFile";
 import { RootState } from "@store/store";
@@ -113,11 +113,11 @@ export const updateDriverBusiness = createAsyncThunk<
     try {
       const { setGalleriesFiles } = useFile();
       const { driver } = thunkAPI.getState() as RootState;
-      
+
       let deletedImages = driver.driver!.docs!.filter(
-          (image) => !data.oldFiles.includes(image)
-        );
-     
+        (image) => !data.oldFiles.includes(image)
+      );
+
       const uploadResponse = await setGalleriesFiles(
         data.files,
         "driver/docs",
@@ -134,7 +134,7 @@ export const updateDriverBusiness = createAsyncThunk<
         PREFIX_URL_WITHOUT_SLASH,
         data.businessInformation
       );
-      if (response.data != undefined) {
+      if (response && response.data != undefined) {
         return response.data;
       } else {
         throw new Error("Une erreur réseau s'est produite");
@@ -147,20 +147,48 @@ export const updateDriverBusiness = createAsyncThunk<
   }
 );
 
-export const updateDriverProfile = async (data: Profile) => {
-  return new Promise<Driver>(async (resolve, reject) => {
-    const response = await axiosClient.put<Driver>(
-      PREFIX_URL + "profile",
-      data
-    );
 
-    if (response.data != undefined) {
-      return resolve(response.data);
-    } else {
-      return reject(new Error("Une erreur réseau s'est produite"));
+export const updateDriverProfile = createAsyncThunk<Driver, Profile>(
+  "driver/getDriverInfo", async (data: Profile) => {
+    try {
+
+      const response = await axiosClient.put<Driver>(
+        PREFIX_URL + "profile",
+        data,
+        {}
+      );
+ 
+    
+      if (response && response.data != undefined) {
+
+        await AsyncStorage.setItem("driver", JSON.stringify(response.data));
+        return response.data;
+      } else {
+        throw new Error("Une erreur réseau s'est produite");
+      }
     }
+    catch (error: any) {
+
+      if (error.response){
+
+        throw new Error(
+          `Une erreur s'est produite : ${error.response.data.error}`
+        );
+
+      }
+      else {
+
+        throw new Error(
+          `Network Error`
+        );
+
+      }
+ 
+
+    }
+
+
   });
-};
 
 export const getDriverInfo = createAsyncThunk<Driver, undefined>(
   "driver/getDriverInfo",
@@ -168,7 +196,7 @@ export const getDriverInfo = createAsyncThunk<Driver, undefined>(
     try {
       const response = await axiosClient.get<Driver>(PREFIX_URL_WITHOUT_SLASH);
 
-      if (response.data != undefined) {
+      if (response && response.data != undefined) {
         AsyncStorage.setItem("driver", JSON.stringify(response.data));
         return response.data;
       } else {
@@ -197,6 +225,7 @@ export const upgradeToDriver = createAsyncThunk<Driver, undefined>(
         throw new Error("Une erreur réseau s'est produite");
       }
     } catch (error: any) {
+      console.log(error.response.data)
       throw new Error(
         `Une erreur s'est produite : ${error.response.data.error}`
       );

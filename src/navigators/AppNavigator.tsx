@@ -27,7 +27,7 @@ export type AppStackParamList = {
   BusinessInformation: undefined;
 
   TimetableScreen: undefined;
-  Chat: undefined,
+  ChatScreen: undefined;
   AddUpdateTaskScreen: {
     task?: TaskProps
   };

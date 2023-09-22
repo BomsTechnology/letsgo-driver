@@ -143,7 +143,7 @@ export interface Profile {
     about?: string,
     contacts?: Contact[],
     address?: Address[],
-    keywords: string[],
+    keywords?: string[],
 }
 
 

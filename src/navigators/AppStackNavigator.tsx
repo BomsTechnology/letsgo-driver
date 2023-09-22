@@ -7,7 +7,7 @@ import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScr
 import AddTaskScreen from "@screens/AddTaskScreen";
 import ChatScreen from "@screens/ChatScreen";
 import ViewTaskScreen from "@screens/ViewTaskScreen";
-import TimetableScreen from "@screens/profile/TimeTableScreen";
+import TimetableScreen from "@screens/profile/TimetableScreen";
 import BusinessInformationScreen from "@screens/profile/BusinessInformationScreen";
 
 
@@ -60,7 +60,7 @@ const StackNavigator = (stack: any) => {
         options={{ headerShown: false }}
       />
       <stack.Screen
-        name="Chat"
+        name="ChatScreen"
         component={ChatScreen}
         options={{ headerShown: false }}
       />

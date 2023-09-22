@@ -1,17 +1,21 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
+  FlatList,
+  SafeAreaView
 } from "react-native";
-import React from "react";
+
 import Colors from "@constants/colors";
-import { SafeAreaView } from "react-native-safe-area-context";
+//import { SafeAreaView } from "react-native-safe-area-context";
 import SimpleHeader from "@components/SimpleHeader";
 import { Ionicons } from "@expo/vector-icons";
-import { FlatList } from "react-native-gesture-handler";
+//import { FlatList } from "react-native-gesture-handler";
 import { RootState, useAppSelector } from "@store/store";
+import { StatusBar } from "expo-status-bar";
 
 interface messageProps {
   id: string;
@@ -65,6 +69,28 @@ const ChatScreen: React.FC = () => {
       message:
         "Hi, how are you? Hi, how are you? Hi, how are you?Hi, how are you? Hi, how are you?  Hi, how are you?",
     },
+    {
+      id: "9",
+      fromMe: true,
+      message: "Goodbye",
+    },
+    {
+      id: "10",
+      fromMe: true,
+      message:
+        "Hi, how are you? Hi, how are you? Hi, how are you?Hi, how are you? Hi, how are you?  Hi, how are you?",
+    },
+    {
+      id: "11",
+      fromMe: true,
+      message: "Goodbye",
+    },
+    {
+      id: "12",
+      fromMe: true,
+      message:
+        "Hi, how are you? Hi, how are you? Hi, how are you?Hi, how are you? Hi, how are you?  Hi, how are you?",
+    },
   ];
 
   const messageRender = ({ item }: { item: messageProps }) => {
@@ -82,7 +108,7 @@ const ChatScreen: React.FC = () => {
             backgroundColor: item.fromMe
               ? Colors.primaryColor
               : settingState.setting.isDarkMode
-              ? Colors.grayTone1 : Colors.whiteTone2,
+                ? Colors.grayTone1 : Colors.whiteTone2,
             elevation: 2,
             paddingHorizontal: 10,
             paddingVertical: 10,
@@ -91,13 +117,13 @@ const ChatScreen: React.FC = () => {
             borderTopEndRadius: item.fromMe
               ? 10
               : index > 0 && !messages[index - 1].fromMe
-              ? 10
-              : 0,
+                ? 10
+                : 0,
             borderTopStartRadius: !item.fromMe
               ? 10
               : index > 0 && messages[index - 1].fromMe
-              ? 10
-              : 0,
+                ? 10
+                : 0,
             flexDirection: "row",
             justifyContent: "flex-start",
             maxWidth: "90%",
@@ -106,7 +132,7 @@ const ChatScreen: React.FC = () => {
           <Text
             style={{
               color: item.fromMe ? Colors.onPrimaryColor : settingState.setting.isDarkMode
-              ? Colors.onPrimaryColor : Colors.onWhiteTone,
+                ? Colors.onPrimaryColor : Colors.onWhiteTone,
               fontFamily: "Poppins_400Regular",
               fontSize: 14,
               width: "auto",
@@ -126,7 +152,19 @@ const ChatScreen: React.FC = () => {
           : styles.container
       }
     >
-      <SimpleHeader text="Mr Teubou" />
+      <StatusBar translucent={true} />
+ 
+
+      <View style={{
+					paddingHorizontal: 20,
+					paddingTop: 20,
+				}}
+				>
+					<SimpleHeader text="Mr Teubou" />
+
+				</View>
+
+
       <FlatList
         data={messages}
         showsHorizontalScrollIndicator={false}
@@ -134,14 +172,15 @@ const ChatScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
         contentContainerStyle={{
-          padding: 5,
+          paddingVertical: 5,
           alignItems: "flex-start",
           width: "100%",
           flexDirection: "column",
         }}
+        
       />
       <View style={settingState.setting.isDarkMode
-          ? styles.inputContainer_DARK :  styles.inputContainer}>
+        ? styles.inputContainer_DARK : styles.inputContainer}>
         <TextInput
           placeholder="Type your message here..."
           onFocus={(event) => console.log(event)}
@@ -149,10 +188,10 @@ const ChatScreen: React.FC = () => {
           style={settingState.setting.isDarkMode
             ? styles.input_DARK : styles.input}
         />
-        <TouchableOpacity>
-          <Ionicons name="send" size={25} color={Colors.primaryColor} />
+        <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          <Ionicons name="send" style={{marginRight: 7.5}} size={25} color={Colors.primaryColor} />
           <Ionicons name="mic" size={25} color={Colors.primaryColor} />
-        </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

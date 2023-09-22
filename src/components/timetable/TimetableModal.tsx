@@ -5,39 +5,84 @@ import {
     Modal,
     TouchableOpacity,
     TextInput,
+    FlatList,
 } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { TimetableEntry } from './TimetableEntry';
 import { Ionicons } from "@expo/vector-icons";
 import Colors from '@constants/colors';
 import TimePicker from '@components/inputFields/TimePicker';
+import { FAB } from 'react-native-paper';
 
 export type TimeEntryModalProps = {
 
     visible: boolean,
-    entry?: TimetableEntry,
-    setTimeTableEntry: (entry: TimetableEntry) => void,
+    entries?: TimetableEntry[],
+    onDayEntryChange?: (entries: TimetableEntry[]) => void,
     setVisible: (state: boolean) => void
 
 }
 
 
-const TimeEntryModal: React.FC<TimeEntryModalProps> = (props) => {
+export type TimeEntryModalItemProps = {
 
-    const [startTime, setStartTime] = useState<Date>(props.entry?.startTime || new Date());
-    const [endTime, setEndTime] = useState<Date>(props.entry?.endTime || new Date());
+    entry?: TimetableEntry,
+    onEntryChange?: (entry: TimetableEntry) => void,
 
-    
+}
+
+
+
+const TimeEntryModalItem: React.FC<TimeEntryModalItemProps> = ({ entry, onEntryChange }) => {
+
+
+    const [startTime, setStartTime] = useState<Date>(entry?.startTime || new Date());
+    const [endTime, setEndTime] = useState<Date>(entry?.endTime || new Date());
+
+
     useEffect(() => {
 
-        props.setTimeTableEntry({...props.entry!, "startTime": startTime, "endTime": endTime})
-       
+        onEntryChange && onEntryChange({ ...entry!, "startTime": startTime, "endTime": endTime })
+
     }, [startTime, endTime])
-    
 
 
     return (
+        <View style={styles.entryContainer}>
+            <Text style={{ fontWeight: "700" }}>Heure De Debut </Text>
+            <TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
+            <Text style={{ fontWeight: "700" }}>Heure De Fin </Text>
+            <TimePicker bgColor='white' date={endTime} setDate={setEndTime} />
+        </View>
+    );
+}
+
+
+const TimeEntryModal: React.FC<TimeEntryModalProps> = (props) => {
+
+    const [entries, setEntries] = useState(props.entries || [])
+
+
+    const onEntryChange = (entry: TimetableEntry) => {
+
+        setEntries([...entries, entry])
+    }
+
+    return (
         <Modal animationType={"slide"} transparent={true} visible={props.visible}>
+{/*             <FAB
+                icon="plus"
+                style={{
+                    zIndex: 300,
+                    position: 'absolute',
+                    margin: 16,
+                    right: 10,
+                    bottom: 120,
+                    backgroundColor: Colors.primaryColor
+                }}
+                onPress={() => 2 }
+            /> */}
+
             <View style={styles.container}>
 
                 <View style={styles.closeButton}>
@@ -48,12 +93,44 @@ const TimeEntryModal: React.FC<TimeEntryModalProps> = (props) => {
                     </TouchableOpacity>
                 </View>
 
+
                 <View style={styles.timeContainer}>
-                    <Text style={{fontWeight: "700"}}>Heure De Debut </Text>
-                    <TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
-                    <Text style={{fontWeight: "700"}}>Heure De Fin </Text>
-                    <TimePicker bgColor='white' date={endTime} setDate={setEndTime} />
+                    <FlatList
+                        data={props.entries}
+                        keyExtractor={(itm, index) => index + ""}
+                        ItemSeparatorComponent={() => <View style={{ height: 3 }} />}
+                        renderItem={(info) => <TimeEntryModalItem
+                            key={info.index}
+                            entry={info.item}
+                            onEntryChange={onEntryChange}
+                        />}>
+                    </FlatList>
+                    <View>
+                        <TouchableOpacity style={{
+                            zIndex: 150,
+                            width: 200,
+                            padding: 10,
+                            borderRadius: 10,
+                            margin: 20,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            elevation: 4,
+                            backgroundColor: Colors.primaryColor
+                        }}
+                            onPress={() => {
+                                props.onDayEntryChange && props.onDayEntryChange(entries);
+                                props.setVisible(false)
+                            }}
+                        >
+                            <Text style={{
+                                fontSize: 15,
+                                fontFamily: 'Poppins_600SemiBold',
+                            }}>Update</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+
+
             </View>
         </Modal>
     );
@@ -74,15 +151,24 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
+    entryContainer: {
+
+        borderRadius: 12,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+        marginVertical: 7
+    },
     timeContainer: {
 
-        height: "40%",
+        height: "80%",
         width: "90%",
         borderRadius: 12,
         padding: 20,
         backgroundColor: "#fff",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "center",
+        marginVertical: 7
     },
     closeButton: {
         position: "absolute",

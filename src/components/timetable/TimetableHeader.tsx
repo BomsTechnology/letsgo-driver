@@ -1,24 +1,26 @@
 import React from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, Text, View, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native'; 
 
 
 
- 
-const DayColumn = ({ column }: { column: string }) => {
+
+const DayColumn = ({ column, onDayPress, day }: { column: string , day: number,  onDayPress?: (day: number)=> void}) => {
     return (
-        <View style={styles.column}>
-            <Text style={[styles.text]}>
-                {column}
-            </Text>
-        </View>
+        <TouchableOpacity  onPress={()=> onDayPress && onDayPress(day)}>
+            <View style={styles.column}>
+                <Text style={[styles.text]}>
+                    {column}
+                </Text>
+            </View>
+        </TouchableOpacity>
     );
 };
 
 
 
 
-const DaysHeader = ({ columns }: { columns: string[] }) => {
+const DaysHeader = ({ columns, onDayPress }: { columns: string[],  onDayPress?: (day: number)=> void }) => {
 
     return (
         <View style={styles.columns}>
@@ -27,7 +29,9 @@ const DaysHeader = ({ columns }: { columns: string[] }) => {
 
                     <DayColumn
                         key={index}
-                        column={column} />
+                        onDayPress={onDayPress}
+                        column={column} 
+                        day={index+1} />
 
                 )
             }
@@ -37,15 +41,19 @@ const DaysHeader = ({ columns }: { columns: string[] }) => {
 
 
 
+interface TimetableHeaderProps {
+
+    onDayPress?: (day: number)=> void
+}
 
 
-const TimetableHeader = () => {
+const TimetableHeader: React.FC<TimetableHeaderProps> = ({onDayPress}) => {
 
     const columns = ["LUN", "MAR", "MER", "JEU", "VEND", "SAM", "DIM"];
 
     return (
         <View style={styles.container}>
-            <DaysHeader columns={columns} />
+            <DaysHeader columns={columns} onDayPress={onDayPress} />
         </View>
     );
 };
@@ -54,7 +62,7 @@ const TimetableHeader = () => {
 
 
 const styles = StyleSheet.create({
-    container: { 
+    container: {
         width: Dimensions.get('screen').width - 60,
         zIndex: 20,
     },
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
         borderLeftWidth: 1,
     },
     text: {
-         
+
         fontSize: 12,
         fontWeight: "700"
     },

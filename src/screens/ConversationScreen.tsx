@@ -92,7 +92,7 @@ const ConversationScreen: React.FC = () => {
 
 		return (
 
-			<TouchableOpacity style={styles.faqItem} onPress={() => navigation.navigate("Chat")}>
+			<TouchableOpacity style={styles.faqItem} onPress={() => navigation.navigate("ChatScreen")}>
 
 				<View style={{
 					width: 50,
@@ -244,7 +244,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		position: "relative",
 		paddingHorizontal: 5,
-		backgroundColor: Colors.whiteTone1
+		borderBottomWidth: 1,
+		borderBottomColor: Colors.whiteTone1
 	},
 	minText: {
 		fontFamily: "Poppins_400Regular",

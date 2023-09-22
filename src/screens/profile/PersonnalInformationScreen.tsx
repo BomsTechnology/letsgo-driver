@@ -21,6 +21,8 @@ import DatePicker from "@components/inputFields/DatePicker";
 import CustomDropdownInput, {
   DropDataProps,
 } from "@components/inputFields/CustomDropdownInput";
+import { Profile } from "../../types/TimeTableProps";
+import { updateDriverProfile } from "@services/useDriver";
 
 const PersonnalInformationScreen = () => {
   const settingState = useAppSelector((state: RootState) => state.setting);
@@ -43,18 +45,22 @@ const PersonnalInformationScreen = () => {
     watch,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<Profile>();
 
-  const firstname = watch("firstname");
-  const lastname = watch("lastname");
+  const firstname = watch("firstName");
+  const lastname = watch("lastName");
 
   const editProfile = async () => {
+
+    console.log('====================================');
+    console.log("edit");
+    console.log('====================================');
     await dispatch(
-      updateUserInfo({
-        firstName: firstname,
-        lastName: lastname,
+      updateDriverProfile({
+        firstName: firstname!,
+        lastName: lastname!,
         gender: selected,
-        birthdate: birthdate.toISOString().split("T")[0],
+        birthdate: birthdate.toISOString().split("T")[0]
       })
     )
       .unwrap()
@@ -80,12 +86,14 @@ const PersonnalInformationScreen = () => {
   useEffect(() => {
     if (!driverState.driver) refreshData();
 
+    console.log(driverState)
+
     setValue(
-      "firstname",
+      "firstName",
       driverState.driver?.firstName ? driverState.driver?.firstName : ""
     );
     setValue(
-      "lastname",
+      "lastName",
       driverState.driver?.lastName ? driverState.driver?.lastName : ""
     );
     if (driverState.driver?.birthdate)
@@ -186,7 +194,7 @@ const PersonnalInformationScreen = () => {
         </Text>
         <CustomInput
           placeholder="Enter your Last Name"
-          name="lastname"
+          name="lastName"
           control={control}
           secureTextEntry={false}
           bgColor={
@@ -210,7 +218,7 @@ const PersonnalInformationScreen = () => {
         </Text>
         <CustomInput
           placeholder="Enter your First Name"
-          name="firstname"
+          name="firstName"
           control={control}
           secureTextEntry={false}
           bgColor={

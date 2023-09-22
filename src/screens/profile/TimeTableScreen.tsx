@@ -88,7 +88,7 @@ const timeDistance = (distance: number) => {
 const TimetableScreen: React.FC = () => {
 
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
-	const [selectedEntry, setSelectedEntry] = useState<TimetableEntry>();
+	const [selectedEntry, setSelectedEntry] = useState<TimetableEntry[]>();
 
 
 	const pivotDate = genTimeBlock('MON');
@@ -101,7 +101,27 @@ const TimetableScreen: React.FC = () => {
 
 	const onEventPress = (evt: any) => {
 
-		setSelectedEntry(evt);
+		const events = new Array<any>()
+		events.push(evt)
+		setSelectedEntry(events);
+		setModalVisible(true)
+	};
+
+
+	const onDayPress = (day: number) => {
+
+		let dayEvent = [...events_data.filter(eventData => eventData.day == day)] 
+
+		if(dayEvent.length == 0){
+
+            dayEvent.push({
+				startTime: new Date(),
+				endTime: new Date(),
+				day: day
+			})
+        }
+
+		setSelectedEntry(dayEvent);		
 		setModalVisible(true)
 	};
 
@@ -118,8 +138,7 @@ const TimetableScreen: React.FC = () => {
 				/>
 			</View>
 			  
-			<TimeEntryModal entry={selectedEntry}
-				setTimeTableEntry={setSelectedEntry}
+			<TimeEntryModal entries={selectedEntry} 
 				visible={modalVisible}
 				setVisible={setModalVisible} />
 
@@ -135,6 +154,7 @@ const TimetableScreen: React.FC = () => {
 					pivotEndTime={24}
 					pivotDate={pivotDate}
 					onEventPress={onEventPress}
+					onDayPress={onDayPress}
 					locale="en"
 				/>
 			</View>

@@ -1,8 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from './features/auth/authSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import settingReducer from './features/setting/settingSlice';
-import userReducer from './features/user/userSlice';
+import settingReducer from './features/setting/settingSlice'; 
 import taskReducer from './features/task/taskSlice'
 import driverReducer from './features/driver/driverSlice';
 

@@ -28,6 +28,7 @@ export type TimetableViewProps = {
 	dateHeaderFormat?: string,
 	entries: TimetableEntry[],
 	onEventPress?: (entry: TimetableEntry) => void
+	onDayPress?: (day: number) => void
 }
 
 
@@ -63,7 +64,7 @@ export const TimetableView: React.FC<TimetableViewProps> = (props) => {
 		<View style={styles.container}>
 			 
 			<View style={styles.header}>
- 				<TimetableHeader/>
+ 				<TimetableHeader onDayPress={props.onDayPress} />
 			</View>
 
 			<ScrollView ref={props.scrollViewRef}>
