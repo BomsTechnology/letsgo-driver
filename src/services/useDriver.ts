@@ -147,48 +147,52 @@ export const updateDriverBusiness = createAsyncThunk<
   }
 );
 
-
-export const updateDriverProfile = createAsyncThunk<Driver, Profile>(
-  "driver/getDriverInfo", async (data: Profile) => {
+export const updateDriverProfile = createAsyncThunk<
+  Driver,
+  {
+    profile: Profile;
+    file: { name: string; file: Blob } | null;
+  }
+>(
+  "driver/getDriverInfo",
+  async (
+    data: { profile: Profile; file: { name: string; file: Blob } | null },
+    thunkAPI
+  ) => {
+    const { uploadFile, getFile } = useFile();
     try {
-
+      if (data.file != null) {
+        let file = new File(
+          [data.file.file],
+          `${new Date().getTime()}_${data.file.name}`
+        );
+        await uploadFile(file, "driver/avatar");
+        let res = await getFile(`${"driver/avatar"}/${file.name}`);
+        if (res.status == "success") data.profile.picture = res.response;
+      }
       const response = await axiosClient.put<Driver>(
         PREFIX_URL + "profile",
-        data,
+        data.profile,
         {}
       );
- 
-    
-      if (response && response.data != undefined) {
 
+      if (response && response.data != undefined) {
         await AsyncStorage.setItem("driver", JSON.stringify(response.data));
         return response.data;
       } else {
         throw new Error("Une erreur réseau s'est produite");
       }
-    }
-    catch (error: any) {
-
-      if (error.response){
-
+    } catch (error: any) {
+      if (error.response) {
         throw new Error(
           `Une erreur s'est produite : ${error.response.data.error}`
         );
-
+      } else {
+        throw new Error(`Network Error`);
       }
-      else {
-
-        throw new Error(
-          `Network Error`
-        );
-
-      }
- 
-
     }
-
-
-  });
+  }
+);
 
 export const getDriverInfo = createAsyncThunk<Driver, undefined>(
   "driver/getDriverInfo",
@@ -225,7 +229,7 @@ export const upgradeToDriver = createAsyncThunk<Driver, undefined>(
         throw new Error("Une erreur réseau s'est produite");
       }
     } catch (error: any) {
-      console.log(error.response.data)
+      console.log(error.response.data);
       throw new Error(
         `Une erreur s'est produite : ${error.response.data.error}`
       );

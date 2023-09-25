@@ -80,7 +80,7 @@ const AppNavigator = () => {
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
         <Stack.Navigator>
-          {isLoggin
+          {isLoggin || authState.token?.access_token
             ? AppStackNavigator(Stack)
             : AuthStackNavigator(Stack)}
         </Stack.Navigator>

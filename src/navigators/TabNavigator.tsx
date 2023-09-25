@@ -33,20 +33,20 @@ const TabNavigator = () => {
             iconName = focused ? 'list' : 'list-outline';
           }
 
-          return <Ionicons name={iconName} size={20} color={color} style={{ alignSelf: 'center', marginTop:0 }} />;
+          return <Ionicons name={iconName} size={18} color={color} style={{ alignSelf: 'center', marginTop:0 }} />;
         },
         tabBarActiveTintColor:  Colors.secondaryColor,
         tabBarInactiveTintColor: settingState.setting.isDarkMode ? Colors.onPrimaryColor : Colors.onWhiteTone,
-        tabBarLabelStyle: { fontSize: 13, fontFamily: 'Poppins_500Medium', alignSelf: 'center', maxWidth: '75%' },
+        tabBarLabelStyle: { fontSize: 12, fontFamily: 'Poppins_500Medium', alignSelf: 'center', maxWidth: '75%' },
         tabBarStyle: {  position:'absolute', bottom:0, elevation: 0, borderTopWidth:0 },
         tabBarInactiveBackgroundColor: settingState.setting.isDarkMode ? Colors.darkTone1 : Colors.whiteTone2,
         tabBarActiveBackgroundColor: settingState.setting.isDarkMode ? Colors.darkTone1 : Colors.whiteTone2, 
         headerTransparent: true,
-        tabBarShowLabel: false,
+
         tabBarItemStyle: {
             marginHorizontal: 5, 
-            flexDirection: 'row-reverse', 
-            alignItems: 'flex-start',
+            flexDirection: 'column', 
+            alignItems: 'center',
             justifyContent: 'center',
             paddingHorizontal: 20,
             gap: 0,
@@ -72,18 +72,18 @@ const TabNavigator = () => {
                 name="Task" 
                 component={PlanningScreen} 
                 options={{ 
-                  tabBarLabel: `Task`, 
+                  tabBarLabel: `Planning`, 
                   headerShown: false,
                 }} 
               />
-              <Tab.Screen 
+              {/*<Tab.Screen 
                 name="Search" 
                 component={SearchScreen} 
                 options={{ 
                   tabBarLabel: `Search`, 
                   headerShown: false,
                 }} 
-              />
+              />*/}
         </Tab.Navigator>
     )
 }

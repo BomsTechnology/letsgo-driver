@@ -23,6 +23,7 @@ import CustomDropdownInput, {
 } from "@components/inputFields/CustomDropdownInput";
 import { Profile } from "../../types/TimeTableProps";
 import { updateDriverProfile } from "@services/useDriver";
+import * as ExpoImagePicker from "expo-image-picker";
 
 const PersonnalInformationScreen = () => {
   const settingState = useAppSelector((state: RootState) => state.setting);
@@ -31,6 +32,8 @@ const PersonnalInformationScreen = () => {
   const [asError, setAsError] = useState(false);
   const [birthdate, setBirthdate] = useState(new Date());
   const [errorMessage, setErrorMessage] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [file, setFile] = useState<{ name: string; file: Blob } | null>(null);
   const [defaultGender, setDefaultGender] = useState<DropDataProps | undefined>(
     undefined
   );
@@ -51,16 +54,24 @@ const PersonnalInformationScreen = () => {
   const lastname = watch("lastName");
 
   const editProfile = async () => {
-
-    console.log('====================================');
+    console.log("====================================");
     console.log("edit");
-    console.log('====================================');
-    await dispatch(
+    console.log("====================================");
+    console.log({
+      firstName: firstname!,
+      lastName: lastname!,
+      gender: selected,
+      birthdate: birthdate.toISOString().split("T")[0],
+    },)
+   /* await dispatch(
       updateDriverProfile({
-        firstName: firstname!,
-        lastName: lastname!,
-        gender: selected,
-        birthdate: birthdate.toISOString().split("T")[0]
+        profile: {
+          firstName: firstname!,
+          lastName: lastname!,
+          gender: selected,
+          birthdate: birthdate.toISOString().split("T")[0],
+        },
+        file: file,
       })
     )
       .unwrap()
@@ -69,7 +80,29 @@ const PersonnalInformationScreen = () => {
       })
       .catch((error) => {
         showError(error.message);
+      });*/
+  };
+
+  const pickImage = async () => {
+    const { status } =
+      await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      showError("Permission to access camera roll is required!");
+    } else {
+      let result = await ExpoImagePicker.launchImageLibraryAsync({
+        mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
       });
+
+      if (!result.canceled) {
+        setAvatar(result.assets[0].uri);
+        const response = await fetch(result.assets[0].uri);
+        const blob = await response.blob();
+        setFile({ file: blob, name: result.assets[0].uri.split("/").pop()! });
+      }
+    }
   };
 
   const refreshData = async () => {
@@ -86,7 +119,7 @@ const PersonnalInformationScreen = () => {
   useEffect(() => {
     if (!driverState.driver) refreshData();
 
-    console.log(driverState)
+    console.log(driverState);
 
     setValue(
       "firstName",
@@ -96,6 +129,7 @@ const PersonnalInformationScreen = () => {
       "lastName",
       driverState.driver?.lastName ? driverState.driver?.lastName : ""
     );
+    if(driverState.driver?.picture) setAvatar(driverState.driver?.picture);
     if (driverState.driver?.birthdate)
       setBirthdate(new Date(Date.parse(driverState.driver?.birthdate)));
     if (driverState.driver?.gender)
@@ -122,11 +156,19 @@ const PersonnalInformationScreen = () => {
             },
           ]}
         >
-          <Image
-            resizeMode="contain"
-            style={[styles.image]}
-            source={require("@assets/images/avatars/Avatar5.png")}
-          />
+          {avatar ? (
+            <Image
+              resizeMode="cover"
+              style={[styles.image]}
+              source={{ uri: avatar }}
+            />
+          ) : (
+            <Ionicons
+              name="person-circle"
+              size={120}
+              color={Colors.primaryColor}
+            />
+          )}
           <View
             style={{
               flexDirection: "row",
@@ -136,6 +178,7 @@ const PersonnalInformationScreen = () => {
             }}
           >
             <TouchableOpacity
+              onPress={pickImage}
               style={
                 settingState.setting.isDarkMode
                   ? styles.actionBtn_DARK
@@ -154,6 +197,10 @@ const PersonnalInformationScreen = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                setAvatar("");
+                setFile(null);
+              }}
               style={
                 settingState.setting.isDarkMode
                   ? styles.actionBtn_DARK
@@ -274,7 +321,7 @@ const PersonnalInformationScreen = () => {
         <CustomButton
           bgColor={Colors.primaryColor}
           fgColor="#fff"
-          isReady={selected && birthdate && lastname && firstname}
+          isReady={true}
           onPress={handleSubmit(editProfile)}
           marginVertical={30}
           text="update"

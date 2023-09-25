@@ -163,8 +163,8 @@ export const TimetableEntryList: React.FC<TimetableEntryListProps> = (props) => 
 
 	return (
 		<View style={styles.container}>
-			{props.times.map(time => (
-				<View key={time} style={styles.timeRow}>
+			{props.times.map((time, i) => (
+				<View key={i} style={styles.timeRow}>
 					<View style={styles.timeLabelLine} />
 				</View>
 			))}

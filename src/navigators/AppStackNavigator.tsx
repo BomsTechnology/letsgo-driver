@@ -7,9 +7,9 @@ import PersonnalInformationScreen from "@screens/profile/PersonnalInformationScr
 import AddTaskScreen from "@screens/AddTaskScreen";
 import ChatScreen from "@screens/ChatScreen";
 import ViewTaskScreen from "@screens/ViewTaskScreen";
-import TimetableScreen from "@screens/profile/TimetableScreen";
 import BusinessInformationScreen from "@screens/profile/BusinessInformationScreen";
 import SyndicatScreen from "@screens/profile/SyndicatScreen";
+import TimetableScreen from "@screens/profile/TimeTableScreen";
 
 
 const StackNavigator = (stack: any) => {
