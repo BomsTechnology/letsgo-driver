@@ -1,10 +1,11 @@
 import axiosClient, { API_BASE_URL } from "@config";
 import { MembershipRequest, Syndicat } from "../types/SyndicatProps"; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
 
-const PREFIX_URL = 'api/v0/members';
+const PREFIX_URL = 'SOCIAL-SERVICE/api/v0/members';
 const SEARCH_URL = '/search';
 
 
@@ -24,6 +25,7 @@ export const makeRequest = async (data: MemberRequestDTO) => {
         
         if (response.data != undefined) {
 
+            await AsyncStorage.setItem("syndicat_request", JSON.stringify(response.data));
             return resolve(response.data);
 
         } else {

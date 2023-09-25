@@ -13,17 +13,19 @@ import { Ionicons } from "@expo/vector-icons";
 import IconButton from "@components/buttons/IconButton";
 import ItemSearchSyndicat from "@components/cards/ItemSearchSyndicat";
 import { Syndicat } from "@mytypes/SyndicatProps";
-import { searchSyndicates } from "@services/useSyndicat";
-import { showError } from "@functions/helperFunctions";
+import { makeRequest, searchSyndicates } from "@services/useSyndicat";
+import { showError, showSuccess } from "@functions/helperFunctions";
 
 export interface SearchSyndicatModalProps {
   modalVisible: boolean;
   setModalVisible: Function;
+  refreshMemberRequest: ()=> void
 }
 
 const SearchSyndicatModal = ({
   modalVisible,
   setModalVisible,
+  refreshMemberRequest
 }: SearchSyndicatModalProps) => {
   const [loading, setLoading] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
@@ -83,9 +85,24 @@ const SearchSyndicatModal = ({
 
   const sendRequest = async (item: Syndicat) => {
     setIsSearch(false);
-    setResults([]);
-    setSearchValue("");
-    setModalVisible(!modalVisible);
+ 
+    await makeRequest({groupId: item.syndicatId})
+    .then(()=> {
+
+      refreshMemberRequest();
+      showSuccess("Demande envoyé")
+      setResults([]);
+      setSearchValue("");
+      setModalVisible(!modalVisible);
+
+    })
+    .catch(()=> {
+
+      showError("Demande non envoyé");
+
+    })
+
+
   };
 
   return (

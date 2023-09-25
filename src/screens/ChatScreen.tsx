@@ -9,19 +9,21 @@ import {
   SafeAreaView
 } from "react-native";
 
-import Colors from "@constants/colors";
-//import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from "@constants/colors"; 
 import SimpleHeader from "@components/SimpleHeader";
-import { Ionicons } from "@expo/vector-icons";
-//import { FlatList } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons"; 
 import { RootState, useAppSelector } from "@store/store";
 import { StatusBar } from "expo-status-bar";
+
+
 
 interface messageProps {
   id: string;
   fromMe: boolean;
   message: string;
 }
+
+
 
 const ChatScreen: React.FC = () => {
 
