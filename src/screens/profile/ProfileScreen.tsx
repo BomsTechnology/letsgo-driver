@@ -130,7 +130,7 @@ const ProfileScreen = () => {
     
     {
       id: "8",
-      label: 'Syndicat',
+      label: 'Parrainage',
       icon: (
         <Ionicons
           name="list-outline"

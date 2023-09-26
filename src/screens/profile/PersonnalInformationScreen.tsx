@@ -63,7 +63,7 @@ const PersonnalInformationScreen = () => {
       gender: selected,
       birthdate: birthdate.toISOString().split("T")[0],
     },)
-   /* await dispatch(
+    await dispatch(
       updateDriverProfile({
         profile: {
           firstName: firstname!,
@@ -72,6 +72,7 @@ const PersonnalInformationScreen = () => {
           birthdate: birthdate.toISOString().split("T")[0],
         },
         file: file,
+        removeAvatar: avatar == "" ? true : false
       })
     )
       .unwrap()
@@ -80,7 +81,7 @@ const PersonnalInformationScreen = () => {
       })
       .catch((error) => {
         showError(error.message);
-      });*/
+      });
   };
 
   const pickImage = async () => {

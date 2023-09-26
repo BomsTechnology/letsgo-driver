@@ -152,11 +152,12 @@ export const updateDriverProfile = createAsyncThunk<
   {
     profile: Profile;
     file: { name: string; file: Blob } | null;
+    removeAvatar: boolean;
   }
 >(
   "driver/getDriverInfo",
   async (
-    data: { profile: Profile; file: { name: string; file: Blob } | null },
+    data: { profile: Profile; file: { name: string; file: Blob } | null; removeAvatar: boolean },
     thunkAPI
   ) => {
     const { uploadFile, getFile } = useFile();
@@ -169,6 +170,8 @@ export const updateDriverProfile = createAsyncThunk<
         await uploadFile(file, "driver/avatar");
         let res = await getFile(`${"driver/avatar"}/${file.name}`);
         if (res.status == "success") data.profile.picture = res.response;
+      }else if(data.removeAvatar){
+        data.profile.picture = "";
       }
       const response = await axiosClient.put<Driver>(
         PREFIX_URL + "profile",

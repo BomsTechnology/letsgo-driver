@@ -12,7 +12,7 @@ const axiosClient: AxiosInstance = axios.create({
 axiosClient.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
-
+    
     if (token) {
       const authToken = JSON.parse(token) as AuthStateTokenProps;
       config.headers.Authorization = `Bearer ${authToken.access_token}`;

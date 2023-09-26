@@ -29,7 +29,7 @@ const DrawerNavigator = () => {
   const settingState = useAppSelector(
     (state: RootState) => state.setting
   );
-  const userState = useAppSelector((state: RootState) => state.user);
+  const driverState = useAppSelector((state: RootState) => state.driver);
   const dispatch = useAppDispatch();
   const menuIcon = (
     <Ionicons name="chevron-back" size={25} color={settingState.setting.isDarkMode ? Colors.onPrimaryColor : Colors.onWhiteTone} />
@@ -53,16 +53,25 @@ const DrawerNavigator = () => {
               }}
             />
             <View style={{ alignItems: "center" }}>
-              <Image
-                source={require("@assets/images/avatars/Avatar5.png")}
-                style={{
-                  height: 130,
-                  width: 130,
-                  borderRadius: 65,
-                }}
-              />
-              <View style={{ margin: 10 }}></View>
-              <Rating enablerating={false} rate={4} size={12} />
+            {driverState.driver?.picture ? (
+            <Image
+              resizeMode="cover"
+              style={{
+                height: 130,
+                width: 130,
+                borderRadius: 65,
+              }}
+              source={{ uri: driverState.driver?.picture }}
+            />
+          ) : (
+            <Ionicons
+              name="person-circle"
+              size={130}
+              color={Colors.primaryColor}
+            />
+          )}
+
+              <Rating enablerating={false} rate={driverState.driver?.score?.starCount!} size={15} />
 
               <Text
                 style={{
@@ -70,9 +79,10 @@ const DrawerNavigator = () => {
                   marginVertical: 8,
                   color: settingState.setting.isDarkMode ? Colors.onPrimaryColor : Colors.onWhiteTone,
                   fontFamily: 'Poppins_600SemiBold',
+
                 }}
               >
-                Hi traveller
+                Hi {driverState.driver?.firstName || driverState.driver?.lastName || driverState.driver?.businessName || "Driver"}  
               </Text>
               <View
                 style={{
