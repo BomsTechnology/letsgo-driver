@@ -26,13 +26,13 @@ const ExperienceCard = ({
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
-        <View style={{ flex: 1 }}>
+        <TouchableOpacity onPress={onUpdate} style={{ flex: 1 }}>
           <Text style={[styles.name]}>{props.label}</Text>
           <Text style={[styles.text]}>
             {`De ${props.startAt} à ${props.endAt}`}
           </Text>
           <Text style={[styles.text]}>{props.desc}</Text>
-        </View>
+        </TouchableOpacity>
         <View style={{ gap: 5 }}>
           <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />

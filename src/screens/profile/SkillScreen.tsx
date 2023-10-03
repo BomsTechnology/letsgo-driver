@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Colors from "@constants/colors";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";

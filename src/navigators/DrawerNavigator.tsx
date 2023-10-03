@@ -21,6 +21,7 @@ import { showError, showSuccess } from "@functions/helperFunctions";
 import ProfileScreen from "@screens/profile/ProfileScreen";
 import ChatScreen from "@screens/ChatScreen";
 import ConversationScreen from "@screens/ConversationScreen";
+import PricingScreen from "@screens/PricingScreen";
 //import i18n from '../locales/i18n';
 
 const Drawer = createDrawerNavigator();
@@ -60,6 +61,7 @@ const DrawerNavigator = () => {
                 height: 130,
                 width: 130,
                 borderRadius: 65,
+                marginBottom: 20
               }}
               source={{ uri: driverState.driver?.picture }}
             />
@@ -197,6 +199,22 @@ const DrawerNavigator = () => {
           drawerIcon: () => (
             <Ionicons
               name="chatbubbles-outline"
+              size={20}
+              color={settingState.setting.isDarkMode ? Colors.grayTone3 : Colors.grayTone2}
+              style={{ position: "absolute", left: 10 }}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Pricing"
+        component={PricingScreen}
+        options={{
+          headerShown: false,
+          drawerLabel: "Pricing",
+          drawerIcon: () => (
+            <Ionicons
+              name="pricetags-outline"
               size={20}
               color={settingState.setting.isDarkMode ? Colors.grayTone3 : Colors.grayTone2}
               style={{ position: "absolute", left: 10 }}

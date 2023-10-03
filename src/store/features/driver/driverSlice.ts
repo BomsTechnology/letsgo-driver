@@ -4,6 +4,7 @@ import {
   DriverExperience,
   DriverSkill,
   HumanIdentity,
+  DriverPricing,
 } from "@mytypes/TimeTableProps";
 import {
   addOrUpdateDriverSkill,
@@ -14,7 +15,8 @@ import {
   removeDriverExperience,
   addOrUpdateDriverLicence,
   removeDriverLicence,
-  updateDriverBusiness
+  updateDriverBusiness,
+  changeDriverPricing,
 } from "@services/useDriver";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export interface driverState {
@@ -39,6 +41,7 @@ const driverSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    
     .addCase(updateDriverBusiness.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -178,6 +181,22 @@ const driverSlice = createSlice({
         }
       )
       .addCase(removeDriverExperience.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message as string;
+      })
+      .addCase(changeDriverPricing.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        changeDriverPricing.fulfilled,
+        (state, action: PayloadAction<DriverPricing>) => {
+          state.loading = false;
+          state.driver!.driverPricing = action.payload;
+          AsyncStorage.setItem("driver", JSON.stringify(state.driver));
+        }
+      )
+      .addCase(changeDriverPricing.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message as string;
       });

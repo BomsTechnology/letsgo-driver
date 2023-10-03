@@ -63,27 +63,29 @@ export const changeDriverAvailabality = async (data: DriverAvaibility) => {
   });
 };
 
-export const changeDriverPricing = async (data: DriverPricing) => {
-  return new Promise<DriverPricing>(async (resolve, reject) => {
+export const changeDriverPricing = createAsyncThunk<
+DriverPricing,
+  DriverPricing
+>("driver/changeDriverPricing", async (data: DriverPricing) => {
+  try {
     const response = await axiosClient.put<DriverPricing>(
       PREFIX_URL + "pricing",
       data
     );
 
     if (response.data != undefined) {
-      return resolve(response.data);
+      return response.data;
     } else {
-      return reject(new Error("Une erreur réseau s'est produite"));
+      throw new Error("Une erreur réseau s'est produite");
     }
-  });
-};
+  } catch (error: any) {
+    throw new Error(`Une erreur s'est produite : ${error.response.data.error}`);
+  }
+});
 
-/*export const updateDriverBusiness = async (data: BusinessInformation) => {
-  return new Promise<Driver>(async (resolve, reject) => {
-    const response = await axiosClient.put<Driver>(
-      PREFIX_URL_WITHOUT_SLASH,
-      data
-    );
+/*export const changeDriverPricing = async (data: DriverPricing) => {
+  return new Promise<DriverPricing>(async (resolve, reject) => {
+    
 
     if (response.data != undefined) {
       return resolve(response.data);
@@ -92,6 +94,7 @@ export const changeDriverPricing = async (data: DriverPricing) => {
     }
   });
 };*/
+
 
 export const updateDriverBusiness = createAsyncThunk<
   Driver,

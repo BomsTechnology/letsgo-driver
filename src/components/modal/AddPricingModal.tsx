@@ -6,25 +6,24 @@ import { Ionicons } from "@expo/vector-icons";
 import CustomInput from "@components/inputFields/CustomInput";
 import CustomButton from "@components/buttons/CustomButton";
 import { useForm } from "react-hook-form";
-import { addOrUpdateDriverSkill } from "@services/useDriver";
-import { DriverSkill } from "@mytypes/TimeTableProps";
+import { changeDriverPricing } from "@services/useDriver";
+import { DriverPricing } from "@mytypes/TimeTableProps";
 import { RootState, useAppDispatch, useAppSelector } from "@store/store";
 import { showError, showSuccess } from "@functions/helperFunctions";
 
-interface AddSkillModalProps {
+interface AddPricingModalProps {
   modalVisible: boolean;
   setModalVisible: Function;
-  skill: DriverSkill;
-  setSkill: Function
+  pricing: DriverPricing;
+  setPricing: Function
 }
 
-const AddSkillModal = ({
+const AddPricingModal = ({
   modalVisible,
   setModalVisible,
-  skill,
-  setSkill
-}: AddSkillModalProps) => {
-  const [isEdit, setIsEdit] = React.useState(true);
+  pricing,
+  setPricing
+}: AddPricingModalProps) => {
   const driverState = useAppSelector((state: RootState) => state.driver);
   const dispatch = useAppDispatch();
   const {
@@ -34,41 +33,50 @@ const AddSkillModal = ({
     setValue,
     //formState: {errors},
   } = useForm();
-  const name = watch("name");
-  const description = watch("description");
+  const pricePerHour = watch("pricePerHour");
+  const pricePerDay = watch("pricePerDay");
+  const pricePerKm = watch("pricePerKm");
   const closeIcon = (
     <Ionicons name="close" size={20} color={Colors.whiteTone1} />
   );
 
-  const addOrUpdateSkill = async () => {
-    await dispatch(
-      addOrUpdateDriverSkill({
-        name: name,
-        desc: description,
+  const addOrUpdatePricing = async () => {
+    console.log({
+        pricePerHour: pricePerHour,
+        pricePerDay: pricePerDay,
+        pricePerKilometer: pricePerKm,
+        currency: 'XAF'
+  })
+    /*await dispatch(
+        changeDriverPricing({
+            pricePerHour: pricePerHour,
+            pricePerDay: pricePerDay,
+            pricePerKilometer: pricePerKm,
+            currency: 'XAF'
       })
     )
       .unwrap()
       .then((driver) => {
-        setSkill(null)
+        setPricing(null)
         setModalVisible(false);
         showSuccess("Add Succes");
       })
       .catch((error) => {
         showError(error.message);
-      });
+      });*/
   };
 
   useEffect(() => {
-    if (skill) {
-      setValue("name", skill?.name);
-      setValue("description", skill?.desc);
-      setIsEdit(false);
+    if (pricing) {
+      setValue("pricePerHour", pricing.pricePerHour?.toString());
+      setValue("pricePerDay", pricing.pricePerDay?.toString());
+      setValue("pricePerKm", pricing.pricePerKilometer?.toString());
     }else{
-      setValue("name", "");
-      setValue("description", "");
-      setIsEdit(true);
+      setValue("pricePerHour", "");
+      setValue("pricePerDay", "");
+      setValue("pricePerKm", "");
     }
-  }, [skill]);
+  }, [pricing]);
 
   return (
     <Modal
@@ -76,7 +84,6 @@ const AddSkillModal = ({
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        setSkill(null)
         setModalVisible(!modalVisible);
       }}
     >
@@ -86,45 +93,25 @@ const AddSkillModal = ({
             bgColor={Colors.secondaryColor}
             icon={closeIcon}
             onPress={() => {
-              setSkill(null)
               setModalVisible(false)
             }}
           />
         </View>
         <View style={styles.modalContainer}>
-          <Text style={styles.description}>Skill Name</Text>
-          <CustomInput
-            placeholder=""
-            name="name"
-            control={control}
-            secureTextEntry={false}
-            fontSize={14}
-            bgColor="#fff"
-            rules={{
-              required: "The name is required",
-            }}
-            editable={isEdit}
-          />
+          <Text style={styles.description}>Prix au kilometre</Text>
+          <CustomInput bgColor='#fff' keyboardType='numeric' control={control} name='pricePerKm' placeholder='' />
 
-          <Text style={styles.description}>Description</Text>
-          <CustomInput
-            placeholder=""
-            name="description"
-            control={control}
-            secureTextEntry={false}
-            fontSize={14}
-            bgColor="#fff"
-            multiline={true}
-            rules={{
-              
-            }}
-          />
+          <Text style={styles.description}>Prix par heure</Text>
+          <CustomInput bgColor='#fff' keyboardType='numeric' control={control} name='pricePerHour' placeholder='' />
+
+          <Text style={styles.description}>Prix par jour</Text>
+          <CustomInput bgColor='#fff' keyboardType='numeric' control={control} name='pricePerDay' placeholder='' />
 
           <CustomButton
             bgColor={Colors.primaryColor}
             fgColor="#fff"
-            isReady={name}
-            onPress={handleSubmit(addOrUpdateSkill)}
+            isReady={true}
+            onPress={handleSubmit(addOrUpdatePricing)}
             text="Save"
             fontSize={14}
             marginVertical={20}
@@ -136,7 +123,7 @@ const AddSkillModal = ({
   );
 };
 
-export default AddSkillModal;
+export default AddPricingModal;
 
 const styles = StyleSheet.create({
   container: {

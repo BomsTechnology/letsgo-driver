@@ -184,6 +184,7 @@ const AddIdentityModal = ({
             fontSize={14}
             marginVertical={20}
           />
+          <View style={{ height:30 }}></View>
         </ScrollView>
       </View>
     </Modal>
@@ -198,23 +199,28 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: "rgba(0,0,0,0.5)",
       alignItems: "center",
-      justifyContent: "center",
+      justifyContent: "flex-end",
       position: "relative",
     },
     modalContainer: {
-      width: "90%",
-      maxHeight: "75%",
-      height: 'auto',
-      backgroundColor: Colors.whiteTone1,
-      borderRadius: 5,
-      padding: 15,
+      width: "100%",
+    maxHeight: "75%",
+    height: "auto",
+    backgroundColor: Colors.whiteTone1,
+    overflow: 'hidden',
+    position: 'relative',
+    paddingHorizontal: 15,
+    paddingVertical: 20,
     },
     modalContainer_DARK: {
-      width: "90%",
-      maxHeight: "80%",
+      width: "100%",
+    maxHeight: "75%",
+    height: "auto",
+    overflow: 'hidden',
+    position: 'relative',
+    paddingHorizontal: 15,
+    paddingVertical: 20,
       backgroundColor: Colors.darkTone4,
-      borderRadius: 5,
-      padding: 15,
     },
     description: {
       fontFamily: "Poppins_300Light",

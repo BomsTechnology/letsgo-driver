@@ -170,6 +170,10 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({ route, navigation }
 					bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone1}
 				/>
 
+
+				<Text style={{ marginTop: 20, fontFamily: "Poppins_500Medium", marginBottom: 10, fontWeight: "700" }}>Heure De Debut </Text>
+				<TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
+
 				<Text style={[settingState.setting.isDarkMode ? styles.semiBoldText_DARK : styles.semiBoldText, { marginTop: 10 }]}>To Date</Text>
 
 				<DatePicker
@@ -177,9 +181,6 @@ const AddTaskScreen: React.FC<AddUpdateTaskScreenProps> = ({ route, navigation }
 					setDate={setToDate}
 					bgColor={settingState.setting.isDarkMode ? Colors.darkTone2 : Colors.whiteTone1}
 				/>
-
-				<Text style={{ marginTop: 20, fontFamily: "Poppins_500Medium", marginBottom: 10, fontWeight: "700" }}>Heure De Debut </Text>
-				<TimePicker bgColor='white' date={startTime} setDate={setStartTime} />
 
 				<Text style={{ marginTop: 20, fontFamily: "Poppins_500Medium", marginBottom: 10, fontWeight: "700" }}>Heure De Fin </Text>
 				<TimePicker bgColor='white' date={endTime} setDate={setEndTime} />

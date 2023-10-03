@@ -33,9 +33,6 @@ const PlanningScreen: React.FC = () => {
 	const refreshTasks = useAppSelector((state: RootState) => state.task);
 
 
-
-
-
 	const [tasks, setTasks] = useState<{ [key: string]: TaskProps[] }>({});
 
 
@@ -177,6 +174,7 @@ const PlanningScreen: React.FC = () => {
 			<FAB
 				icon="plus"
 				style={styles.fab}
+				color={Colors.secondaryColor}
 				onPress={() => navigation.navigate("AddUpdateTaskScreen", {})}
 			/>
 
@@ -230,12 +228,14 @@ const styles = StyleSheet.create({
 	},
 
 	fab: {
-		position: 'absolute',
+		position: "absolute",
 		margin: 16,
 		right: 0,
 		bottom: 50,
-		backgroundColor: Colors.primaryColor
-	},
+		borderRadius: 9999,
+		backgroundColor: Colors.primaryColor,
+		color: Colors.onPrimaryColor,
+	  },
 
 });
 

@@ -97,7 +97,7 @@ const ProfileScreen = () => {
     },
     {
       id: "5",
-      label: 'Identity Piece',
+      label: 'Identity Document',
       icon: (
         <Entypo
           name="v-card"
@@ -133,7 +133,7 @@ const ProfileScreen = () => {
       label: 'Parrainage',
       icon: (
         <Ionicons
-          name="list-outline"
+          name="link-outline"
           size={25}
           color={
             settingState.setting.isDarkMode
@@ -143,6 +143,22 @@ const ProfileScreen = () => {
         />
       ),
       onPress: () => navigation.navigate("Syndicat"),
+    },
+    {
+      id: "9",
+      label: 'My Pricing',
+      icon: (
+        <Ionicons
+          name="cash-outline"
+          size={25}
+          color={
+            settingState.setting.isDarkMode
+              ? Colors.grayTone3
+              : Colors.grayTone1
+          }
+        />
+      ),
+      onPress: () => navigation.navigate("MyPricing"),
     },
   ];
 

@@ -28,6 +28,7 @@ export type AppStackParamList = {
   Syndicat: undefined;
   TimetableScreen: undefined;
   ChatScreen: undefined;
+  MyPricing: undefined;
   AddUpdateTaskScreen: {
     task?: TaskProps
   };

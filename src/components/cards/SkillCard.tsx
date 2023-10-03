@@ -21,8 +21,8 @@ const SkillCard = ({
 }) => {
   return (
     <View style={[styles.container]}>
-      <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <TouchableOpacity onPress={onUpdate} style={{ flex: 1 }}>
+        <View  style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <SimpleLineIcons
             name="puzzle"
             size={15}
@@ -31,7 +31,7 @@ const SkillCard = ({
           <Text style={[styles.name]}>{props.name}</Text>
         </View>
         <Text style={[styles.text]}>{props.desc}</Text>
-      </View>
+      </TouchableOpacity>
       <View style={{ gap: 5 }}>
         <TouchableOpacity onPress={onUpdate}>
           <AntDesign name="edit" size={16} color={Colors.primaryColor} />

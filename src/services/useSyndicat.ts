@@ -51,11 +51,8 @@ export const searchSyndicates = async (data: SearchSyndicateField) => {
         const response = await axiosClient.post<Syndicat[]>(SEARCH_URL + '/syndicat', data);
         
         if (response.data != undefined) {
-
             return resolve(response.data);
-
         } else {
-
             return reject(new Error("Une erreur réseau s'est produite"))
         }
 

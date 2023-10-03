@@ -10,6 +10,7 @@ import ViewTaskScreen from "@screens/ViewTaskScreen";
 import BusinessInformationScreen from "@screens/profile/BusinessInformationScreen";
 import SyndicatScreen from "@screens/profile/SyndicatScreen";
 import TimetableScreen from "@screens/profile/TimeTableScreen";
+import MyPricingScreen from "@screens/profile/MyPricingScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -68,6 +69,11 @@ const StackNavigator = (stack: any) => {
       <stack.Screen
         name="Syndicat"
         component={SyndicatScreen}
+        options={{ headerShown: false }}
+      />
+      <stack.Screen
+        name="MyPricing"
+        component={MyPricingScreen}
         options={{ headerShown: false }}
       />
     </>

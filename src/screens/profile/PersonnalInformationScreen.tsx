@@ -54,15 +54,6 @@ const PersonnalInformationScreen = () => {
   const lastname = watch("lastName");
 
   const editProfile = async () => {
-    console.log("====================================");
-    console.log("edit");
-    console.log("====================================");
-    console.log({
-      firstName: firstname!,
-      lastName: lastname!,
-      gender: selected,
-      birthdate: birthdate.toISOString().split("T")[0],
-    },)
     await dispatch(
       updateDriverProfile({
         profile: {
@@ -72,7 +63,7 @@ const PersonnalInformationScreen = () => {
           birthdate: birthdate.toISOString().split("T")[0],
         },
         file: file,
-        removeAvatar: avatar == "" ? true : false
+        removeAvatar: avatar == "" ? true : false,
       })
     )
       .unwrap()
@@ -120,8 +111,6 @@ const PersonnalInformationScreen = () => {
   useEffect(() => {
     if (!driverState.driver) refreshData();
 
-    console.log(driverState);
-
     setValue(
       "firstName",
       driverState.driver?.firstName ? driverState.driver?.firstName : ""
@@ -130,7 +119,7 @@ const PersonnalInformationScreen = () => {
       "lastName",
       driverState.driver?.lastName ? driverState.driver?.lastName : ""
     );
-    if(driverState.driver?.picture) setAvatar(driverState.driver?.picture);
+    if (driverState.driver?.picture) setAvatar(driverState.driver?.picture);
     if (driverState.driver?.birthdate)
       setBirthdate(new Date(Date.parse(driverState.driver?.birthdate)));
     if (driverState.driver?.gender)
@@ -157,19 +146,21 @@ const PersonnalInformationScreen = () => {
             },
           ]}
         >
-          {avatar ? (
-            <Image
-              resizeMode="cover"
-              style={[styles.image]}
-              source={{ uri: avatar }}
-            />
-          ) : (
-            <Ionicons
-              name="person-circle"
-              size={120}
-              color={Colors.primaryColor}
-            />
-          )}
+          <TouchableOpacity onPress={pickImage}>
+            {avatar ? (
+              <Image
+                resizeMode="cover"
+                style={[styles.image]}
+                source={{ uri: avatar }}
+              />
+            ) : (
+              <Ionicons
+                name="person-circle"
+                size={120}
+                color={Colors.primaryColor}
+              />
+            )}
+          </TouchableOpacity>
           <View
             style={{
               flexDirection: "row",

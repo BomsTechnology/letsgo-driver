@@ -33,7 +33,7 @@ const IdentityCard = ({
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "stretch" }}>
-        <View style={{ flex: 1 }}>
+        <TouchableOpacity onPress={onUpdate} style={{ flex: 1 }}>
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={[styles.text]}>{props.type}</Text>
             {props.isVerified && props.verifiedAt && (
@@ -49,7 +49,7 @@ const IdentityCard = ({
             {`De ${props.issueAt} à ${props.expireAt}`}
           </Text>
           <Text style={[styles.text]}>{props.formattedIdentityProvider}</Text>
-        </View>
+        </TouchableOpacity>
         <View style={{ gap: 5 }}>
           <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />
