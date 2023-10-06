@@ -11,6 +11,7 @@ import BusinessInformationScreen from "@screens/profile/BusinessInformationScree
 import SyndicatScreen from "@screens/profile/SyndicatScreen";
 import TimetableScreen from "@screens/profile/TimeTableScreen";
 import MyPricingScreen from "@screens/profile/MyPricingScreen";
+import PreviewDriverDetailScreen from "@screens/profile/PreviewDriverDetailScreen";
 
 
 const StackNavigator = (stack: any) => {
@@ -74,6 +75,11 @@ const StackNavigator = (stack: any) => {
       <stack.Screen
         name="MyPricing"
         component={MyPricingScreen}
+        options={{ headerShown: false }}
+      />
+      <stack.Screen
+        name="PreviewDriverDetail"
+        component={PreviewDriverDetailScreen}
         options={{ headerShown: false }}
       />
     </>

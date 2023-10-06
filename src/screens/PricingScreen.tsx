@@ -56,7 +56,6 @@ const PricingCard = ({trial}: {trial: IPricing}) => {
     return (
         <View style={{
             width: 260,
-            height: 530,
             elevation: 5,
             backgroundColor: trial.color,
             borderRadius: 8,
@@ -265,7 +264,7 @@ const PricingScreen = () => {
                             <View style={
                                 {
                                     flexDirection: 'row',
-                                    alignItems: 'center',
+                                    alignItems: 'stretch',
                                     gap: 4,
                                     padding: 8,
                                 }
@@ -277,7 +276,7 @@ const PricingScreen = () => {
                                     showsHorizontalScrollIndicator={false}
                                     contentContainerStyle={{
                                         flexDirection: 'row',
-                                        alignItems: 'center',
+                                        alignItems: 'stretch',
                                         gap: 18,
                                         padding: 8,
                                     }}

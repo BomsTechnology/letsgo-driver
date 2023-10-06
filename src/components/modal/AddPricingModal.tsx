@@ -41,13 +41,7 @@ const AddPricingModal = ({
   );
 
   const addOrUpdatePricing = async () => {
-    console.log({
-        pricePerHour: pricePerHour,
-        pricePerDay: pricePerDay,
-        pricePerKilometer: pricePerKm,
-        currency: 'XAF'
-  })
-    /*await dispatch(
+   await dispatch(
         changeDriverPricing({
             pricePerHour: pricePerHour,
             pricePerDay: pricePerDay,
@@ -63,7 +57,7 @@ const AddPricingModal = ({
       })
       .catch((error) => {
         showError(error.message);
-      });*/
+      });
   };
 
   useEffect(() => {

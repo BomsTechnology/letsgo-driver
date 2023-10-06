@@ -29,6 +29,7 @@ export type AppStackParamList = {
   TimetableScreen: undefined;
   ChatScreen: undefined;
   MyPricing: undefined;
+  PreviewDriverDetail: undefined;
   AddUpdateTaskScreen: {
     task?: TaskProps
   };

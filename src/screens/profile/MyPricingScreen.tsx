@@ -93,20 +93,20 @@ const MyPricingScreen = () => {
                         <View style={{width: '100%', marginTop: 18}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingVertical: 8}}>
                                 <Text style={{fontFamily: 'Poppins_500Medium'}}>Par Heure</Text>
-                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerHour ? driverState.driver?.driverPricing?.pricePerHour : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
+                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerHour ? driverState.driver?.driverPricing?.pricePerKilometer : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
                             </View>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingVertical: 8}}>
                                 <Text style={{fontFamily: 'Poppins_500Medium'}}>Par Jour</Text>
-                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerDay ? driverState.driver?.driverPricing?.pricePerHour : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
+                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerDay ? driverState.driver?.driverPricing?.pricePerDay : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
                             </View>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%', paddingVertical: 8}}>
                                 <Text style={{fontFamily: 'Poppins_500Medium'}}>Au Kilometre</Text>
-                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerKilometer ? driverState.driver?.driverPricing?.pricePerHour : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
+                                <Text style={{fontFamily: 'Poppins_400Regular'}}>{driverState.driver?.driverPricing?.pricePerKilometer ? driverState.driver?.driverPricing?.pricePerKilometer : '0'} { driverState.driver?.driverPricing?.currency ? driverState.driver?.driverPricing?.currency : 'XAF'}</Text>
                             </View>
                         </View>
                     </View>
 
-                    <View style={{paddingVertical: 10, paddingHorizontal: 12, backgroundColor: '#fff', elevation: 5, borderRadius: 12, marginVertical: 8}}>
+                   {/* <View style={{paddingVertical: 10, paddingHorizontal: 12, backgroundColor: '#fff', elevation: 5, borderRadius: 12, marginVertical: 8}}>
                         <Text style={{fontSize: 20, fontFamily: 'Poppins_600SemiBold'}}>Methodes de Payement</Text>
                         <View style={
                             {
@@ -139,7 +139,7 @@ const MyPricingScreen = () => {
                         </View>
                     </View>
 
-                    {/*<View style={{paddingVertical: 15, paddingHorizontal: 12, width: '100%', backgroundColor: '#fff', elevation: 5, borderRadius: 12, marginVertical: 8}}>
+                    <View style={{paddingVertical: 15, paddingHorizontal: 12, width: '100%', backgroundColor: '#fff', elevation: 5, borderRadius: 12, marginVertical: 8}}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
                             <Text style={{fontSize: 20, fontFamily: 'Poppins_600SemiBold'}}>Langues</Text>
                             <Ionicons name='pencil' size={20} />

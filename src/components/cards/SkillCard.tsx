@@ -16,13 +16,13 @@ const SkillCard = ({
   onUpdate,
 }: {
   props: DriverSkill;
-  onDelete: (event: GestureResponderEvent) => void;
-  onUpdate: (event: GestureResponderEvent) => void;
+  onDelete?: (event: GestureResponderEvent) => void;
+  onUpdate?: (event: GestureResponderEvent) => void;
 }) => {
   return (
     <View style={[styles.container]}>
-      <TouchableOpacity onPress={onUpdate} style={{ flex: 1 }}>
-        <View  style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <SimpleLineIcons
             name="puzzle"
             size={15}
@@ -31,18 +31,18 @@ const SkillCard = ({
           <Text style={[styles.name]}>{props.name}</Text>
         </View>
         <Text style={[styles.text]}>{props.desc}</Text>
-      </TouchableOpacity>
+      </View>
       <View style={{ gap: 5 }}>
-        <TouchableOpacity onPress={onUpdate}>
+        {onUpdate && <TouchableOpacity onPress={onUpdate}>
           <AntDesign name="edit" size={16} color={Colors.primaryColor} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onDelete}>
+        </TouchableOpacity>}
+        {onDelete && <TouchableOpacity onPress={onDelete}>
           <Ionicons
             name="trash-outline"
             size={17}
             color={Colors.accentOrange}
           />
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </View>
   );

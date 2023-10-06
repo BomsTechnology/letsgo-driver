@@ -197,7 +197,7 @@ const ProfileScreen = () => {
         icon="eye"
         color={Colors.secondaryColor}
         style={styles.fab}
-        onPress={() => console.log('Pressed')}
+        onPress={() => navigation.navigate("PreviewDriverDetail")}
       />
         <FlatList
           data={options}
@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderRadius: 9999,
     backgroundColor: Colors.primaryColor,
-    color: Colors.onPrimaryColor
+    color: Colors.onPrimaryColor,
+    zIndex: 9999  
   },
     container: {
       flex: 1,

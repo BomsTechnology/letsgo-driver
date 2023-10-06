@@ -211,7 +211,7 @@ const DrawerNavigator = () => {
         component={PricingScreen}
         options={{
           headerShown: false,
-          drawerLabel: "Pricing",
+          drawerLabel: "Subscription",
           drawerIcon: () => (
             <Ionicons
               name="pricetags-outline"

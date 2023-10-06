@@ -83,17 +83,6 @@ DriverPricing,
   }
 });
 
-/*export const changeDriverPricing = async (data: DriverPricing) => {
-  return new Promise<DriverPricing>(async (resolve, reject) => {
-    
-
-    if (response.data != undefined) {
-      return resolve(response.data);
-    } else {
-      return reject(new Error("Une erreur réseau s'est produite"));
-    }
-  });
-};*/
 
 
 export const updateDriverBusiness = createAsyncThunk<
@@ -476,6 +465,7 @@ export const changeDriverAvailability = createAsyncThunk<
     throw new Error(`Une erreur s'est produite : ${error.response.data.error}`);
   }
 });
+
 function async(
   arg0: undefined,
   thunkAPI: any

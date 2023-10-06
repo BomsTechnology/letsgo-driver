@@ -19,9 +19,9 @@ const ExperienceCard = ({
   onOpenSlider,
 }: {
   props: DriverExperience;
-  onDelete: (event: GestureResponderEvent) => void;
-  onUpdate: (event: GestureResponderEvent) => void;
-  onOpenSlider: (event: GestureResponderEvent) => void;
+  onDelete?: (event: GestureResponderEvent) => void;
+  onUpdate?: (event: GestureResponderEvent) => void;
+  onOpenSlider?: (event: GestureResponderEvent) => void;
 }) => {
   return (
     <View style={[styles.container]}>
@@ -34,16 +34,16 @@ const ExperienceCard = ({
           <Text style={[styles.text]}>{props.desc}</Text>
         </TouchableOpacity>
         <View style={{ gap: 5 }}>
-          <TouchableOpacity onPress={onUpdate}>
+          {onUpdate && <TouchableOpacity onPress={onUpdate}>
             <AntDesign name="edit" size={16} color={Colors.primaryColor} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onDelete}>
+          </TouchableOpacity>}
+          {onDelete && <TouchableOpacity onPress={onDelete}>
             <Ionicons
               name="trash-outline"
               size={17}
               color={Colors.accentOrange}
             />
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       </View>
       <View style={{ flexDirection: "row", gap: 10, flexWrap: "wrap" }}>
